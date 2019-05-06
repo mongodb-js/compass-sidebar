@@ -7,11 +7,14 @@ import SidebarCollection from 'components/sidebar-collection';
 
 describe('SidebarCollection [Component]', () => {
   let component;
-  let spy;
-  let hold;
+  let openCollectionSpy;
+  let dropCollectionSpy;
+
   describe('is not active', () => {
     beforeEach(() => {
-      spy = sinon.spy();
+      openCollectionSpy = sinon.spy();
+      dropCollectionSpy = sinon.spy();
+
       component = mount(<SidebarCollection
         _id="db.coll"
         database="db"
@@ -21,14 +24,14 @@ describe('SidebarCollection [Component]', () => {
         isWritable
         description="description"
         activeNamespace=""
+        openCollection={openCollectionSpy}
+        dropCollection={dropCollectionSpy}
       />);
-      hold = global.hadronApp.appRegistry;
-      global.hadronApp.appRegistry = {emit: spy};
     });
     afterEach(() => {
       component = null;
-      spy = null;
-      global.hadronApp.appRegistry = hold;
+      openCollectionSpy = null;
+      dropCollectionSpy = null;
     });
     it('mounts the root element', () => {
       expect(component.find(`.${classnames(styles['compass-sidebar-item'])}`)).to.be.present();
@@ -44,12 +47,14 @@ describe('SidebarCollection [Component]', () => {
     });
     it('triggers drop collection when clicked', () => {
       component.find('[data-test-id="compass-sidebar-icon-drop-collection"]').simulate('click');
-      expect(spy.called).to.equal(true);
-      expect(spy.args[0]).to.deep.equal(['open-drop-collection', 'db', 'coll']);
+      expect(dropCollectionSpy.called).to.equal(true);
+      expect(dropCollectionSpy.args[0]).to.deep.equal(['db.coll']);
     });
   });
   describe('is active', () => {
     beforeEach(() => {
+      openCollectionSpy = sinon.spy();
+      dropCollectionSpy = sinon.spy();
       component = mount(<SidebarCollection
         _id="db.coll"
         database="db"
@@ -59,10 +64,14 @@ describe('SidebarCollection [Component]', () => {
         isWritable
         description="description"
         activeNamespace="db.coll"
+        openCollection={openCollectionSpy}
+        dropCollection={dropCollectionSpy}
       />);
     });
     afterEach(() => {
       component = null;
+      openCollectionSpy = null;
+      dropCollectionSpy = null;
     });
     it('registers as active', () => {
       expect(component.find(`.${classnames(styles['compass-sidebar-item-is-active'])}`)).to.be.present();
@@ -73,7 +82,9 @@ describe('SidebarCollection [Component]', () => {
   });
   describe('Views', () => {
     beforeEach(() => {
-      spy = sinon.spy();
+      openCollectionSpy = sinon.spy();
+      dropCollectionSpy = sinon.spy();
+
       component = mount(<SidebarCollection
         _id="echo.albums"
         database="echo"
@@ -86,14 +97,14 @@ describe('SidebarCollection [Component]', () => {
         isWritable
         description="description"
         activeNamespace="echo.albums"
+        openCollection={openCollectionSpy}
+        dropCollection={dropCollectionSpy}
       />);
-      hold = global.hadronApp.appRegistry;
-      global.hadronApp.appRegistry = {emit: spy};
     });
     afterEach(() => {
       component = null;
-      spy = null;
-      global.hadronApp.appRegistry = hold;
+      openCollectionSpy = null;
+      dropCollectionSpy = null;
     });
     it('sets collection name', () => {
       expect(component.find('[data-test-id="sidebar-collection"]').text()).to.equal('albums ');
@@ -106,7 +117,8 @@ describe('SidebarCollection [Component]', () => {
     });
     it('triggers drop collection when clicked', () => {
       component.find('[data-test-id="compass-sidebar-icon-drop-collection"]').simulate('click');
-      expect(spy.called).to.equal(true);
+      expect(dropCollectionSpy.called).to.equal(true);
+      expect(dropCollectionSpy.args[0]).to.deep.equal(['echo.albums']);
     });
   });
 });

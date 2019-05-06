@@ -19,56 +19,18 @@ class SidebarCollection extends PureComponent {
     description: PropTypes.string.isRequired,
     view_on: PropTypes.any, // undefined or string if view
     pipeline: PropTypes.any, // undefined or array if view
-    type: PropTypes.oneOf(['collection', 'view'])
+    type: PropTypes.oneOf(['collection', 'view']),
+    dropCollection: PropTypes.func.isRequired,
+    openCollection: PropTypes.func.isRequired
   };
 
-  constructor(props) {
-    super(props);
-    this.CollectionStore = global.hadronApp.appRegistry.getStore(
-      'App.CollectionStore'
-    );
-    this.NamespaceStore = global.hadronApp.appRegistry.getStore(
-      'App.NamespaceStore'
-    );
+  handleClick = () => {
+    this.props.openCollection(this.props._id, this.props.readonly, this.props.view_on);
   }
 
-  getCollectionName() {
-    return toNS(this.props._id).collection;
-  }
-
-  handleClick() {
-    if (this.NamespaceStore.ns !== this.props._id) {
-      this.CollectionStore.setCollection({
-        _id: this.props._id,
-        database: this.props.database,
-        capped: this.props.capped,
-        power_of_two: this.props.power_of_two,
-        readonly: this.props.readonly,
-        type: this.props.type,
-        view_on: this.props.view_on,
-        pipeline: this.props.pipeline,
-        activeNamespace: this.props.activeNamespace
-      });
-      global.hadronApp.appRegistry.emit(
-        'select-namespace',
-        this.props._id,
-        this.props.readonly,
-        this.props.view_on
-      );
-      const ipc = require('hadron-ipc');
-      ipc.call('window:show-collection-submenu');
-    }
-  }
-
-  handleDropCollectionClick(isWritable) {
-    if (isWritable) {
-      const databaseName = this.props.database;
-      const collectionName = this.getCollectionName();
-      global.hadronApp.appRegistry.emit(
-        'open-drop-collection',
-        databaseName,
-        collectionName
-      );
+  handleDropCollectionClick = () => {
+    if (this.props.isWritable) {
+      this.props.dropCollection(this.props._id);
     }
   }
 
@@ -94,15 +56,18 @@ class SidebarCollection extends PureComponent {
       const tooltipText = this.props.isWritable
         ? 'Drop collection'
         : this.props.description;
+
       const tooltipOptions = {
         'data-for': TOOLTIP_IDS.DROP_COLLECTION,
         'data-effect': 'solid',
         'data-offset': "{'bottom': 10, 'left': -5}",
         'data-tip': tooltipText
       };
+
       const disabled = !this.props.isWritable
         ? styles['compass-sidebar-icon-is-disabled']
         : '';
+
       const dropClassName = classnames(
         styles['compass-sidebar-icon'],
         styles['compass-sidebar-icon-drop-collection'],
@@ -110,14 +75,12 @@ class SidebarCollection extends PureComponent {
         'fa-trash-o',
         disabled
       );
+
       return (
         <i
           className={dropClassName}
           data-test-id="compass-sidebar-icon-drop-collection"
-          onClick={this.handleDropCollectionClick.bind(
-            this,
-            this.props.isWritable
-          )}
+          onClick={this.handleDropCollectionClick}
           {...tooltipOptions}
         />
       );
@@ -125,11 +88,12 @@ class SidebarCollection extends PureComponent {
   }
 
   render() {
-    const collectionName = this.getCollectionName();
+    const collectionName = toNS(this.props._id).collection;
     const active =
       this.props.activeNamespace === this.props._id
         ? styles['compass-sidebar-item-is-active']
         : '';
+
     const itemClassName = classnames(
       styles['compass-sidebar-item'],
       styles['compass-sidebar-item-is-actionable'],
@@ -138,8 +102,8 @@ class SidebarCollection extends PureComponent {
     return (
       <div className={itemClassName}>
         <div
-          onClick={this.handleClick.bind(this)}
-          className={classnames(styles['compass-sidebar-item-title'])}
+          onClick={this.handleClick}
+          className={styles['compass-sidebar-item-title']}
           data-test-id="sidebar-collection"
           title={this.props._id}>
           {collectionName}&nbsp;

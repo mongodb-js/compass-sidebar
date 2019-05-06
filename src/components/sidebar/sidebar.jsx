@@ -14,6 +14,10 @@ import SidebarInstanceProperties from 'components/sidebar-instance-properties';
 import { toggleIsCollapsed } from 'modules/is-collapsed';
 import { filterDatabases, changeDatabases } from 'modules/databases';
 import { changeFilterRegex } from 'modules/filter-regex';
+import {
+  dropCollection, openCollection, createCollection,
+  dropDatabase, openDatabase, createDatabase
+} from 'modules/index';
 
 import { TOOLTIP_IDS } from 'constants/sidebar-constants';
 
@@ -34,7 +38,13 @@ class Sidebar extends PureComponent {
     toggleIsCollapsed: PropTypes.func.isRequired,
     filterDatabases: PropTypes.func.isRequired,
     changeDatabases: PropTypes.func.isRequired,
-    changeFilterRegex: PropTypes.func.isRequired
+    changeFilterRegex: PropTypes.func.isRequired,
+    dropCollection: PropTypes.func.isRequired,
+    openCollection: PropTypes.func.isRequired,
+    createCollection: PropTypes.func.isRequired,
+    dropDatabase: PropTypes.func.isRequired,
+    openDatabase: PropTypes.func.isRequired,
+    createDatabase: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -82,7 +92,7 @@ class Sidebar extends PureComponent {
     this.refs.filter.focus();
   }
 
-  handleFilter(event) {
+  handleFilter = (event) => {
     const searchString = event.target.value;
 
     let re;
@@ -96,9 +106,9 @@ class Sidebar extends PureComponent {
     this.props.filterDatabases(re, null, null);
   }
 
-  handleCreateDatabaseClick(isWritable) {
-    if (isWritable) {
-      global.hadronApp.appRegistry.emit('open-create-database');
+  handleCreateDatabaseClick = () => {
+    if (this.props.isWritable) {
+      this.props.createDatabase();
     }
   }
 
@@ -154,19 +164,20 @@ class Sidebar extends PureComponent {
         'data-offset': "{'right': -10}",
         'data-tip': tooltipText
       };
+
       const isW = !this.props.isWritable ? styles['compass-sidebar-button-is-disabled'] : '';
       const className = classnames(styles['compass-sidebar-button-create-database'], styles[isW]);
       return (
         <div
-          className={classnames(styles['compass-sidebar-button-create-database-container'])}
+          className={styles['compass-sidebar-button-create-database-container']}
           {...tooltipOptions}
         >
           <button
             className={className}
             title="Create Database"
-            onClick={this.handleCreateDatabaseClick.bind(this, this.props.isWritable)}>
+            onClick={this.handleCreateDatabaseClick}>
             <i className="mms-icon-add" />
-            <div className={classnames(styles['plus-button'])}>
+            <div className={styles['plus-button']}>
               Create Database
             </div>
           </button>
@@ -185,6 +196,10 @@ class Sidebar extends PureComponent {
       collections: db.collections,
       expanded: this.props.databases.expandedDblist[db._id],
       onClick: this._onDBClick.bind(this),
+      dropCollection: this.props.dropCollection,
+      openCollection: this.props.openCollection,
+      createCollection: this.props.createCollection,
+      dropDatabase: this.props.dropDatabase,
       key,
       style,
       index
@@ -247,7 +262,7 @@ class Sidebar extends PureComponent {
             ref="filter"
             className={classnames(styles['compass-sidebar-search-input'])}
             placeholder="filter"
-            onChange={this.handleFilter.bind(this)} />
+            onChange={this.handleFilter} />
         </div>
         <div className={classnames(styles['compass-sidebar-content'])}>
           {this.renderSidebarScroll()}
@@ -291,7 +306,13 @@ const MappedSidebar = connect(
     toggleIsCollapsed,
     filterDatabases,
     changeDatabases,
-    changeFilterRegex
+    changeFilterRegex,
+    dropCollection,
+    openCollection,
+    createCollection,
+    dropDatabase,
+    openDatabase,
+    createDatabase
   },
 )(Sidebar);
 

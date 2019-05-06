@@ -18,15 +18,13 @@ class SidebarDatabase extends PureComponent {
     onClick: PropTypes.func.isRequired,
     index: PropTypes.number.isRequired,
     isWritable: PropTypes.bool.isRequired,
-    description: PropTypes.string.isRequired
+    description: PropTypes.string.isRequired,
+    dropCollection: PropTypes.func.isRequired,
+    createCollection: PropTypes.func.isRequired,
+    openCollection: PropTypes.func.isRequired,
+    openDatabase: PropTypes.func.isRequired,
+    dropDatabase: PropTypes.func.isRequired
   };
-
-  constructor(props) {
-    super(props);
-    const appRegistry = global.hadronApp.appRegistry;
-    this.CollectionStore = appRegistry.getStore('App.CollectionStore');
-    this.NamespaceStore = appRegistry.getStore('App.NamespaceStore');
-  }
 
   getCollectionComponents() {
     if (this.props.expanded) {
@@ -42,7 +40,9 @@ class SidebarDatabase extends PureComponent {
           type: c.type,
           activeNamespace: this.props.activeNamespace,
           isWritable: this.props.isWritable,
-          description: this.props.description
+          description: this.props.description,
+          dropCollection: this.props.dropCollection,
+          openCollection: this.props.openCollection
         };
         return (
           <SidebarCollection key={c._id} {...props} />
@@ -61,32 +61,25 @@ class SidebarDatabase extends PureComponent {
     );
   }
 
-  handleDBClick(db) {
-    if (this.NamespaceStore.ns !== db) {
-      this.CollectionStore.setCollection({});
-      this.NamespaceStore.ns = db;
-      const ipc = require('hadron-ipc');
-      ipc.call('window:hide-collection-submenu');
-    }
+  handleOpenDatabaseClick = () => {
+    this.props.openDatabase(this.props._id);
   }
 
-  handleArrowClick() {
+  handleArrowClick = () => {
     if (this.props.onClick) {
       this.props.onClick(this.props._id);
     }
   }
 
-  handleCreateCollectionClick(isWritable) {
-    if (isWritable) {
-      const databaseName = this.props._id;
-      global.hadronApp.appRegistry.emit('open-create-collection', databaseName);
+  handleCreateCollectionClick = () => {
+    if (this.props.isWritable) {
+      this.props.createCollection(this.props._id);
     }
   }
 
-  handleDropDBClick(isWritable) {
-    if (isWritable) {
-      const databaseName = this.props._id;
-      global.hadronApp.appRegistry.emit('open-drop-database', databaseName);
+  handleDropDatabaseClick = () => {
+    if (this.props.isWritable) {
+      this.props.dropDatabase(this.props._id);
     }
   }
 
@@ -115,7 +108,7 @@ class SidebarDatabase extends PureComponent {
       return (
         <i
           className={createClassName}
-          onClick={this.handleCreateCollectionClick.bind(this, this.props.isWritable)}
+          onClick={this.handleCreateCollectionClick}
           {...createTooltipOptions} />
       );
     }
@@ -142,7 +135,7 @@ class SidebarDatabase extends PureComponent {
       return (
         <i
           className={dropClassName}
-          onClick={this.handleDropDBClick.bind(this, this.props.isWritable)}
+          onClick={this.handleDropDatabaseClick}
           {...dropTooltipOptions} />
       );
     }
@@ -164,11 +157,11 @@ class SidebarDatabase extends PureComponent {
         style={this.props.style}>
         <div className={headerClassName}>
           <div className={classnames(styles['compass-sidebar-item-header-actions'], styles['compass-sidebar-item-header-actions-expand'])}>
-            <i onClick={this.handleArrowClick.bind(this)} className={this.getArrowIconClasses()} />
+            <i onClick={this.handleArrowClick} className={this.getArrowIconClasses()} />
           </div>
           <div
-            onClick={this.handleDBClick.bind(this, this.props._id)}
-            className={classnames(styles['compass-sidebar-item-header-title'])} title={this.props._id}
+            onClick={this.handleOpenDatabaseClick}
+            className={styles['compass-sidebar-item-header-title']} title={this.props._id}
             data-test-id="sidebar-database">
             {this.props._id}
           </div>
@@ -177,7 +170,7 @@ class SidebarDatabase extends PureComponent {
             {this.renderDropDatabaseButton()}
           </div>
         </div>
-        <div className={classnames(styles['compass-sidebar-item-content'])}>
+        <div className={styles['compass-sidebar-item-content']}>
           {this.getCollectionComponents.call(this)}
         </div>
       </div>
