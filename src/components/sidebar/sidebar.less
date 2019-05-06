@@ -15,8 +15,7 @@
   flex-grow: 0;
   flex-shrink: 0;
   margin: 0;
-  overflow: hidden;
-  transition: flex-basis @compass-sidebar-transition-time ease;
+  transition: width @compass-sidebar-transition-time ease;
   height: 100%;
 
   &-toggle {
@@ -37,6 +36,7 @@
 
   &-expanded {
     flex-basis: 250px;
+    width: 250px;
   }
 
   &-properties, // TODO
@@ -86,7 +86,6 @@
 
   &-content {
     flex: 1;
-    overflow: hidden;
   }
 
   *::-webkit-scrollbar-track {
@@ -125,7 +124,6 @@
     height: 28px;
     width: 28px;
     margin: 0 auto;
-    overflow: hidden;
     text-transform: uppercase;
     transition: all 180ms ease;
     white-space: nowrap;
@@ -158,9 +156,10 @@
 }
 
 .compass-sidebar-collapsed {
-  overflow: hidden;
   cursor: pointer;
   flex-basis: 36px;
+  width: 36px;
+  overflow-x: hidden;
 
   .compass-sidebar-toggle {
     left: 36px;
@@ -237,3 +236,21 @@
   outline: 0;
 }
 
+:global {
+  /**
+   * Override `react-virtualized` so tooltips/dropdown menus 
+   * aren't cut off.
+   */
+  .ReactVirtualized__Grid__innerScrollContainer {
+    overflow: initial !important;
+    overflow-x: visible !important;
+    overflow-y: auto;
+    outline: none;
+  }
+
+  .ReactVirtualized__List {
+    overflow: initial !important;
+    overflow-x: visible !important;
+    overflow-y: auto;
+  }
+}
