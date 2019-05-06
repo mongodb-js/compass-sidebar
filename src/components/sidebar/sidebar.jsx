@@ -16,7 +16,8 @@ import { filterDatabases, changeDatabases } from 'modules/databases';
 import { changeFilterRegex } from 'modules/filter-regex';
 import {
   dropCollection, openCollection, createCollection,
-  dropDatabase, openDatabase, createDatabase
+  dropDatabase, openDatabase, createDatabase,
+  dropView, modifyView
 } from 'modules/index';
 
 import { TOOLTIP_IDS } from 'constants/sidebar-constants';
@@ -44,7 +45,9 @@ class Sidebar extends PureComponent {
     createCollection: PropTypes.func.isRequired,
     dropDatabase: PropTypes.func.isRequired,
     openDatabase: PropTypes.func.isRequired,
-    createDatabase: PropTypes.func.isRequired
+    createDatabase: PropTypes.func.isRequired,
+    modifyView: PropTypes.func.isRequired,
+    dropView: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -200,6 +203,8 @@ class Sidebar extends PureComponent {
       openCollection: this.props.openCollection,
       createCollection: this.props.createCollection,
       dropDatabase: this.props.dropDatabase,
+      modifyView: this.props.modifyView,
+      dropView: this.props.dropView,
       key,
       style,
       index
@@ -312,7 +317,9 @@ const MappedSidebar = connect(
     createCollection,
     dropDatabase,
     openDatabase,
-    createDatabase
+    createDatabase,
+    dropView,
+    modifyView
   },
 )(Sidebar);
 

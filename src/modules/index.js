@@ -158,4 +158,30 @@ export const dropDatabase = (ns) => {
   };
 };
 
+/**
+ * Open the drop view dialog.
+ *
+ * @emits open-drop-view
+ * @param {String} ns The view namespace string.
+ * @returns {Function} Dispatcher
+ */
+export const dropView = (ns) => {
+  return (dispatch) => {
+    dispatch(appRegistryEmit('open-drop-view', ns));
+  };
+};
+
+/**
+ * Opens the aggregation plugin to modify the view.
+ *
+ * @emits open-modify-view
+ * @param {String} ns The view namespace string.
+ * @returns {Function} Dispatcher
+ */
+export const modifyView = (ns) => {
+  return (dispatch) => {
+    dispatch(appRegistryEmit('open-modify-view', ns));
+  };
+};
+
 export default rootReducer;

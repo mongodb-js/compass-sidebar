@@ -21,18 +21,24 @@ class SidebarCollection extends PureComponent {
     pipeline: PropTypes.any, // undefined or array if view
     type: PropTypes.oneOf(['collection', 'view']),
     dropCollection: PropTypes.func.isRequired,
-    openCollection: PropTypes.func.isRequired
+    openCollection: PropTypes.func.isRequired,
+    modifyView: PropTypes.func.isRequired,
+    dropView: PropTypes.func.isRequired
   };
 
   handleClick = () => {
-    this.props.openCollection(this.props._id, this.props.readonly, this.props.view_on);
-  }
+    this.props.openCollection(
+      this.props._id,
+      this.props.readonly,
+      this.props.view_on
+    );
+  };
 
   handleDropCollectionClick = () => {
     if (this.props.isWritable) {
       this.props.dropCollection(this.props._id);
     }
-  }
+  };
 
   isReadonlyDistro() {
     return process.env.HADRON_READONLY === 'true';
