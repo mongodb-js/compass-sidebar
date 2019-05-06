@@ -6,6 +6,8 @@ import toNS from 'mongodb-ns';
 import classnames from 'classnames';
 import styles from './sidebar-collection.less';
 
+import { Dropdown, MenuItem } from 'react-bootstrap';
+
 class SidebarCollection extends PureComponent {
   static displayName = 'SidebarCollection';
   static propTypes = {
@@ -38,6 +40,14 @@ class SidebarCollection extends PureComponent {
     if (this.props.isWritable) {
       this.props.dropCollection(this.props._id);
     }
+  };
+
+  handleModifyViewClick = () => {
+    this.props.modifyView(this.props._id);
+  };
+
+  handleDropViewClick = () => {
+    this.props.dropView(this.props._id);
   };
 
   isReadonlyDistro() {
@@ -93,6 +103,30 @@ class SidebarCollection extends PureComponent {
     }
   }
 
+  renderActions() {
+    if (this.props.readonly === false) {
+      return this.renderDropCollectionButton();
+    }
+
+    return (
+      <Dropdown
+        className={styles['compass-sidebar-item-actions-ddl-view-dropdown']}
+        id={`side-bar-view-actions-${this.props._id}`}>
+        <Dropdown.Toggle className="btn-xs btn" />
+        <Dropdown.Menu>
+          <MenuItem onClick={this.handleModifyViewClick}>
+            Modify source pipeline
+          </MenuItem>
+          <MenuItem
+            className={styles['compass-sidebar-item-actions-ddl-view-drop']}
+            onClick={this.handleDropViewClick}>
+            Drop View
+          </MenuItem>
+        </Dropdown.Menu>
+      </Dropdown>
+    );
+  }
+
   render() {
     const collectionName = toNS(this.props._id).collection;
     const active =
@@ -120,7 +154,7 @@ class SidebarCollection extends PureComponent {
             styles['compass-sidebar-item-actions'],
             styles['compass-sidebar-item-actions-ddl']
           )}>
-          {this.renderDropCollectionButton()}
+          {this.renderActions()}
         </div>
       </div>
     );
