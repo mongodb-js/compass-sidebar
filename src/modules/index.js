@@ -19,7 +19,8 @@ import isWritable, {
   INITIAL_STATE as IS_WRITABLE_INITIAL_STATE
 } from 'modules/is-writable';
 import appRegistry, {
-  appRegistryEmit, INITIAL_STATE as APP_REGISTRY_INITIAL_STATE
+  appRegistryEmit,
+  INITIAL_STATE as APP_REGISTRY_INITIAL_STATE
 } from 'modules/app-registry';
 import { RESET } from 'modules/reset';
 
@@ -72,13 +73,9 @@ const rootReducer = (state, action) => {
  * @emits open-drop-collection
  * @param {String} ns Namespace string of the collection to drop.
  */
-export const dropCollection = ns => {
+export const dropCollection = (ns) => {
   const { database, collection } = parseNs(ns);
-  appRegistryEmit(
-    'open-drop-collection',
-    database,
-    collection
-  );
+  appRegistryEmit('open-drop-collection', database, collection);
 };
 
 /**
@@ -86,28 +83,39 @@ export const dropCollection = ns => {
  *
  * @emits select-namespace
  * @param {String} ns Namespace string of the collection to select.
+ * @param {Boolean} [isReadonly] If the collection is a view.
+ * @param {String} [viewOn] Colleection name a view is based on.
+ * @returns {Function} Dispatcher
  */
 export const openCollection = (ns, isReadonly, viewOn) => {
   return (dispatch) => {
-    dispatch(appRegistryEmit(
-      'select-namespace',
-      ns,
-      isReadonly,
-      viewOn
-    ));
+    dispatch(appRegistryEmit('select-namespace', ns, isReadonly, viewOn));
 
     const ipc = require('hadron-ipc');
     ipc.call('window:show-collection-submenu');
   };
 };
 
-export const createCollection = (database) => {
+/**
+ * Open the create collection dialog.
+ *
+ * @emits open-create-collection
+ * @param {String} databaseName Which database the collection will be created under.
+ * @returns {Function} Dispatcher
+ */
+export const createCollection = (databaseName) => {
   return (dispatch) => {
-    dispatch(appRegistryEmit('open-create-collection', database));
+    dispatch(appRegistryEmit('open-create-collection', databaseName));
   };
 };
 
-export const openDatabase = ns => {
+/**
+ * Open database details.
+ *
+ * @param {String} ns The database name
+ * @returns {Function} Dispatcher
+ */
+export const openDatabase = (ns) => {
   return (dispatch, getState) => {
     const state = getState();
     const NamespaceStore = state.appRegistry.getStore('App.NamespaceStore');
@@ -126,13 +134,25 @@ export const openDatabase = ns => {
   };
 };
 
+/**
+ * Open the create database dialog.
+ * @emits open-create-database
+ * @returns {Function} Dispatcher
+ */
 export const createDatabase = () => {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(appRegistryEmit('open-create-database'));
   };
 };
 
-export const dropDatabase = ns => {
+/**
+ * Open the drop database dialog.
+ *
+ * @emits open-drop-database
+ * @param {String} ns The database name.
+ * @returns {Function} Dispatcher
+ */
+export const dropDatabase = (ns) => {
   return (dispatch) => {
     dispatch(appRegistryEmit('open-drop-database', ns));
   };
