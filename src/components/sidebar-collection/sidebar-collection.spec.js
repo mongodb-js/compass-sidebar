@@ -169,12 +169,12 @@ describe('SidebarCollection [Component]', () => {
         component.find(`.${styles['compass-sidebar-item-view-icon']}`)
       ).to.be.present();
     });
-    it('triggers drop collection when clicked', () => {
+    it('triggers drop view when clicked', () => {
       component
-        .find('[data-test-id="compass-sidebar-icon-drop-collection"]')
+        .find(`.${styles['compass-sidebar-item-actions-ddl-view-drop']}`).last()
         .simulate('click');
-      expect(dropCollectionSpy.called).to.equal(true);
-      expect(dropCollectionSpy.args[0]).to.deep.equal(['echo.albums']);
+      expect(dropViewSpy.called).to.equal(true);
+      expect(dropViewSpy.args[0]).to.deep.equal(['echo.albums']);
     });
   });
 });

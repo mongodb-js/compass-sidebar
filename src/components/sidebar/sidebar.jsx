@@ -15,9 +15,14 @@ import { toggleIsCollapsed } from 'modules/is-collapsed';
 import { filterDatabases, changeDatabases } from 'modules/databases';
 import { changeFilterRegex } from 'modules/filter-regex';
 import {
-  dropCollection, openCollection, createCollection,
-  dropDatabase, openDatabase, createDatabase,
-  dropView, modifyView
+  dropCollection,
+  openCollection,
+  createCollection,
+  dropDatabase,
+  openDatabase,
+  createDatabase,
+  dropView,
+  modifyView
 } from 'modules/index';
 
 import { TOOLTIP_IDS } from 'constants/sidebar-constants';
@@ -52,7 +57,9 @@ class Sidebar extends PureComponent {
 
   constructor(props) {
     super(props);
-    this.StatusActions = global.hadronApp.appRegistry.getAction('Status.Actions');
+    this.StatusActions = global.hadronApp.appRegistry.getAction(
+      'Status.Actions'
+    );
   }
 
   componentWillReceiveProps() {
@@ -65,11 +72,9 @@ class Sidebar extends PureComponent {
     ReactTooltip.rebuild();
   }
 
-  getSidebarClasses() {
-  }
+  getSidebarClasses() {}
 
-  getToggleClasses() {
-  }
+  getToggleClasses() {}
 
   handleCollapse() {
     if (!this.props.isCollapsed) {
@@ -107,15 +112,15 @@ class Sidebar extends PureComponent {
 
     this.props.changeFilterRegex(re);
     this.props.filterDatabases(re, null, null);
-  }
+  };
 
   handleCreateDatabaseClick = () => {
     if (this.props.isWritable) {
       this.props.createDatabase();
     }
-  }
+  };
 
-  _calculateRowHeight({index}) {
+  _calculateRowHeight({ index }) {
     const db = this.props.databases.databases[index];
     let height = ROW_HEIGHT;
     if (this.props.databases.expandedDblist[db._id]) {
@@ -153,43 +158,51 @@ class Sidebar extends PureComponent {
   _onDBClick(_id) {
     const expandedDB = cloneDeep(this.props.databases.expandedDblist);
     expandedDB[_id] = !expandedDB[_id];
-    this.props.changeDatabases(this.props.databases.databases, expandedDB, this.props.databases.activeNamespace);
+    this.props.changeDatabases(
+      this.props.databases.databases,
+      expandedDB,
+      this.props.databases.activeNamespace
+    );
     this.list.recomputeRowHeights();
   }
 
   renderCreateDatabaseButton() {
     if (!this.isReadonlyDistro() && !(this.props.instance.dataLake && this.props.instance.dataLake.isDataLake)) {
       const tooltipText = this.props.description;
-      const tooltipOptions = this.props.isWritable ? {} : {
-        'data-for': TOOLTIP_IDS.CREATE_DATABASE_BUTTON,
-        'data-effect': 'solid',
-        'data-place': 'right',
-        'data-offset': "{'right': -10}",
-        'data-tip': tooltipText
-      };
+      const tooltipOptions = this.props.isWritable
+        ? {}
+        : {
+          'data-for': TOOLTIP_IDS.CREATE_DATABASE_BUTTON,
+          'data-effect': 'solid',
+          'data-place': 'right',
+          'data-offset': "{'right': -10}",
+          'data-tip': tooltipText
+        };
 
-      const isW = !this.props.isWritable ? styles['compass-sidebar-button-is-disabled'] : '';
-      const className = classnames(styles['compass-sidebar-button-create-database'], styles[isW]);
+      const isW = !this.props.isWritable
+        ? styles['compass-sidebar-button-is-disabled']
+        : '';
+      const className = classnames(
+        styles['compass-sidebar-button-create-database'],
+        styles[isW]
+      );
       return (
         <div
           className={styles['compass-sidebar-button-create-database-container']}
-          {...tooltipOptions}
-        >
+          {...tooltipOptions}>
           <button
             className={className}
             title="Create Database"
             onClick={this.handleCreateDatabaseClick}>
             <i className="mms-icon-add" />
-            <div className={styles['plus-button']}>
-              Create Database
-            </div>
+            <div className={styles['plus-button']}>Create Database</div>
           </button>
         </div>
       );
     }
   }
 
-  renderSidebarDatabase({index, key, style}) {
+  renderSidebarDatabase({ index, key, style }) {
     const db = this.props.databases.databases[index];
     const props = {
       isWritable: this.props.isWritable,
@@ -202,6 +215,7 @@ class Sidebar extends PureComponent {
       dropCollection: this.props.dropCollection,
       openCollection: this.props.openCollection,
       createCollection: this.props.createCollection,
+      openDatabase: this.props.openDatabase,
       dropDatabase: this.props.dropDatabase,
       modifyView: this.props.modifyView,
       dropView: this.props.dropView,
@@ -209,15 +223,13 @@ class Sidebar extends PureComponent {
       style,
       index
     };
-    return (
-      <SidebarDatabase {...props} />
-    );
+    return <SidebarDatabase {...props} />;
   }
 
   renderSidebarScroll() {
     return (
       <AutoSizer>
-        {({height, width}) => (
+        {({ height, width }) => (
           <List
             width={width}
             height={height}
@@ -235,11 +247,11 @@ class Sidebar extends PureComponent {
   }
 
   render() {
-    const collapsed = this.props.isCollapsed ?
-      'compass-sidebar-collapsed' :
-      'compass-sidebar-expanded';
-    const collapsedButton = 'fa' +
-      (this.props.isCollapsed ? ' fa-caret-right' : ' fa-caret-left');
+    const collapsed = this.props.isCollapsed
+      ? 'compass-sidebar-collapsed'
+      : 'compass-sidebar-expanded';
+    const collapsedButton =
+      'fa' + (this.props.isCollapsed ? ' fa-caret-right' : ' fa-caret-left');
 
     return (
       <div
@@ -247,11 +259,13 @@ class Sidebar extends PureComponent {
         data-test-id="instance-sidebar"
         onClick={this.handleExpand.bind(this)}>
         <button
-          className={classnames(styles['compass-sidebar-toggle'], 'btn btn-default btn-sm')}
+          className={classnames(
+            styles['compass-sidebar-toggle'],
+            'btn btn-default btn-sm'
+          )}
           onClick={this.handleCollapse.bind(this)}
-          data-test-id="toggle-sidebar"
-        >
-          <i className={collapsedButton}/>
+          data-test-id="toggle-sidebar">
+          <i className={collapsedButton} />
         </button>
 
         <SidebarInstanceProperties
@@ -261,13 +275,20 @@ class Sidebar extends PureComponent {
         <div
           className={classnames(styles['compass-sidebar-filter'])}
           onClick={this.handleSearchFocus.bind(this)}>
-          <i className={classnames('fa', 'fa-search', styles['compass-sidebar-search-icon'])}/>
+          <i
+            className={classnames(
+              'fa',
+              'fa-search',
+              styles['compass-sidebar-search-icon']
+            )}
+          />
           <input
             data-test-id="sidebar-filter-input"
             ref="filter"
             className={classnames(styles['compass-sidebar-search-input'])}
             placeholder="filter"
-            onChange={this.handleFilter} />
+            onChange={this.handleFilter}
+          />
         </div>
         <div className={classnames(styles['compass-sidebar-content'])}>
           {this.renderSidebarScroll()}
@@ -320,7 +341,7 @@ const MappedSidebar = connect(
     createDatabase,
     dropView,
     modifyView
-  },
+  }
 )(Sidebar);
 
 export default MappedSidebar;
