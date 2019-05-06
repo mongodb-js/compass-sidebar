@@ -7,6 +7,7 @@ import { filterDatabases } from 'modules/databases';
 import { reset } from 'modules/reset';
 import { toggleIsWritable } from 'modules/is-writable';
 import { changeDescription } from 'modules/description';
+import { appRegistryActivated } from 'modules/app-registry';
 
 const store = createStore(reducer, applyMiddleware(thunk));
 
@@ -16,10 +17,12 @@ store.onActivated = (appRegistry) => {
     store.dispatch(filterDatabases(null, state.instance.databases, null));
   });
 
-  appRegistry.getStore('DeploymentAwareness.WriteStateStore').listen((state) => {
-    store.dispatch(toggleIsWritable(state.isWritable));
-    store.dispatch(changeDescription(state.description));
-  });
+  appRegistry
+    .getStore('DeploymentAwareness.WriteStateStore')
+    .listen((state) => {
+      store.dispatch(toggleIsWritable(state.isWritable));
+      store.dispatch(changeDescription(state.description));
+    });
 
   appRegistry.on('collection-changed', (ns) => {
     store.dispatch(filterDatabases(null, null, ns || ''));
@@ -32,7 +35,11 @@ store.onActivated = (appRegistry) => {
   appRegistry.on('data-service-disconnected', () => {
     store.dispatch(reset());
   });
-};
 
+  /**
+   * Set the app registry to use later.
+   */
+  store.dispatch(appRegistryActivated(appRegistry));
+};
 
 export default store;

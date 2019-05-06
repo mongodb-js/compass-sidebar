@@ -72,10 +72,13 @@ const rootReducer = (state, action) => {
  *
  * @emits open-drop-collection
  * @param {String} ns Namespace string of the collection to drop.
+ * @returns {Function} The thunk
  */
 export const dropCollection = (ns) => {
-  const { database, collection } = parseNs(ns);
-  appRegistryEmit('open-drop-collection', database, collection);
+  return (dispatch) => {
+    const { database, collection } = parseNs(ns);
+    dispatch(appRegistryEmit('open-drop-collection', database, collection));
+  };
 };
 
 /**
@@ -85,7 +88,7 @@ export const dropCollection = (ns) => {
  * @param {String} ns Namespace string of the collection to select.
  * @param {Boolean} [isReadonly] If the collection is a view.
  * @param {String} [viewOn] Colleection name a view is based on.
- * @returns {Function} Dispatcher
+ * @returns {Function} The thunk
  */
 export const openCollection = (ns, isReadonly, viewOn) => {
   return (dispatch) => {
@@ -101,7 +104,7 @@ export const openCollection = (ns, isReadonly, viewOn) => {
  *
  * @emits open-create-collection
  * @param {String} databaseName Which database the collection will be created under.
- * @returns {Function} Dispatcher
+ * @returns {Function} The thunk
  */
 export const createCollection = (databaseName) => {
   return (dispatch) => {
@@ -113,7 +116,7 @@ export const createCollection = (databaseName) => {
  * Open database details.
  *
  * @param {String} ns The database name
- * @returns {Function} Dispatcher
+ * @returns {Function} The thunk
  */
 export const openDatabase = (ns) => {
   return (dispatch, getState) => {
@@ -137,7 +140,7 @@ export const openDatabase = (ns) => {
 /**
  * Open the create database dialog.
  * @emits open-create-database
- * @returns {Function} Dispatcher
+ * @returns {Function} The thunk
  */
 export const createDatabase = () => {
   return (dispatch) => {
@@ -150,7 +153,7 @@ export const createDatabase = () => {
  *
  * @emits open-drop-database
  * @param {String} ns The database name.
- * @returns {Function} Dispatcher
+ * @returns {Function} The thunk
  */
 export const dropDatabase = (ns) => {
   return (dispatch) => {
@@ -163,7 +166,7 @@ export const dropDatabase = (ns) => {
  *
  * @emits open-drop-view
  * @param {String} ns The view namespace string.
- * @returns {Function} Dispatcher
+ * @returns {Function} The thunk
  */
 export const dropView = (ns) => {
   return (dispatch) => {
@@ -176,7 +179,7 @@ export const dropView = (ns) => {
  *
  * @emits open-modify-view
  * @param {String} ns The view namespace string.
- * @returns {Function} Dispatcher
+ * @returns {Function} The thunk
  */
 export const modifyView = (ns) => {
   return (dispatch) => {
