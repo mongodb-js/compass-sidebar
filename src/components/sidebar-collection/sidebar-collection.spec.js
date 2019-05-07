@@ -58,7 +58,7 @@ describe('SidebarCollection [Component]', () => {
     it('sets collection name', () => {
       expect(
         component.find('[data-test-id="sidebar-collection"]').text()
-      ).to.equal('coll ');
+      ).to.equal('coll');
     });
     it('does not register as readonly', () => {
       expect(
@@ -114,7 +114,7 @@ describe('SidebarCollection [Component]', () => {
     it('sets collection name', () => {
       expect(
         component.find('[data-test-id="sidebar-collection"]').text()
-      ).to.equal('coll ');
+      ).to.equal('coll');
     });
   });
   describe('Views', () => {
@@ -157,7 +157,7 @@ describe('SidebarCollection [Component]', () => {
     it('sets collection name', () => {
       expect(
         component.find('[data-test-id="sidebar-collection"]').text()
-      ).to.equal('albums ');
+      ).to.equal('albums');
     });
     it('registers as readonly', () => {
       expect(
@@ -171,7 +171,8 @@ describe('SidebarCollection [Component]', () => {
     });
     it('triggers drop view when clicked', () => {
       component
-        .find(`.${styles['compass-sidebar-item-actions-ddl-view-drop']}`).last()
+        .find('[data-test-id="compass-sidebar-item-actions-ddl-view-drop"]')
+        .at(1)
         .simulate('click');
       expect(dropViewSpy.called).to.equal(true);
       expect(dropViewSpy.args[0]).to.deep.equal(['echo.albums']);
