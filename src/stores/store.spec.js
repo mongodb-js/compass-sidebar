@@ -26,7 +26,7 @@ const instance = {
 };
 
 
-describe('IndexesStore [Store]', () => {
+describe('SidebarStore [Store]', () => {
   beforeEach(() => {
     store.dispatch(reset());
   });
