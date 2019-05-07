@@ -177,5 +177,14 @@ describe('SidebarCollection [Component]', () => {
       expect(dropViewSpy.called).to.equal(true);
       expect(dropViewSpy.args[0]).to.deep.equal(['echo.albums']);
     });
+
+    it('triggers modify view when clicked', () => {
+      component
+        .find('[data-test-id="compass-sidebar-item-actions-ddl-view-modify"]')
+        .at(1)
+        .simulate('click');
+      expect(modifyViewSpy.called).to.equal(true);
+      expect(modifyViewSpy.args[0]).to.deep.equal(['echo.albums']);
+    });
   });
 });
