@@ -14,43 +14,51 @@ class SidebarDatabase extends PureComponent {
     activeNamespace: PropTypes.string.isRequired,
     collections: PropTypes.array.isRequired,
     expanded: PropTypes.bool.isRequired,
-    style: PropTypes.object.isRequired,
-    onClick: PropTypes.func.isRequired,
-    index: PropTypes.number.isRequired,
+    onExpandedToggled: PropTypes.func.isRequired,
     isWritable: PropTypes.bool.isRequired,
-    description: PropTypes.string.isRequired,
     dropCollection: PropTypes.func.isRequired,
     createCollection: PropTypes.func.isRequired,
     openCollection: PropTypes.func.isRequired,
     openDatabase: PropTypes.func.isRequired,
     dropDatabase: PropTypes.func.isRequired,
     modifyView: PropTypes.func.isRequired,
-    dropView: PropTypes.func.isRequired
+    dropView: PropTypes.func.isRequired,
+    style: PropTypes.object,
+    index: PropTypes.number,
+    description: PropTypes.string
+  };
+
+  static defaultProps = {
+    style: {},
+    index: 0,
+    description: ''
   };
 
   getCollectionComponents() {
-    if (this.props.expanded) {
-      return this.props.collections.map((c) => {
-        const props = {
-          _id: c._id,
-          database: c.database,
-          capped: c.capped,
-          power_of_two: c.power_of_two,
-          readonly: c.readonly,
-          view_on: c.view_on,
-          pipeline: c.pipeline,
-          type: c.type,
-          activeNamespace: this.props.activeNamespace,
-          isWritable: this.props.isWritable,
-          description: this.props.description,
-          dropCollection: this.props.dropCollection,
-          openCollection: this.props.openCollection,
-          dropView: this.props.dropView,
-          modifyView: this.props.modifyView
-        };
-        return <SidebarCollection key={c._id} {...props} />;
-      });
+    if (!this.props.expanded) {
+      return null;
     }
+
+    return this.props.collections.map((c) => {
+      const props = {
+        _id: c._id,
+        database: c.database,
+        capped: c.capped,
+        power_of_two: c.power_of_two,
+        readonly: c.readonly,
+        view_on: c.view_on,
+        pipeline: c.pipeline,
+        type: c.type,
+        activeNamespace: this.props.activeNamespace,
+        isWritable: this.props.isWritable,
+        description: this.props.description,
+        dropCollection: this.props.dropCollection,
+        openCollection: this.props.openCollection,
+        dropView: this.props.dropView,
+        modifyView: this.props.modifyView
+      };
+      return <SidebarCollection key={c._id} {...props} />;
+    });
   }
 
   getArrowIconClasses() {
@@ -67,10 +75,8 @@ class SidebarDatabase extends PureComponent {
     this.props.openDatabase(this.props._id);
   };
 
-  handleArrowClick = () => {
-    if (this.props.onClick) {
-      this.props.onClick(this.props._id);
-    }
+  handleToggleExpandedClick = () => {
+    this.props.onExpandedToggled(this.props._id);
   };
 
   handleCreateCollectionClick = () => {
@@ -90,63 +96,68 @@ class SidebarDatabase extends PureComponent {
   }
 
   renderCreateCollectionButton() {
-    if (!this.isReadonlyDistro()) {
-      const createTooltipText = this.props.isWritable
-        ? 'Create collection'
-        : this.props.description;
-      const createTooltipOptions = {
-        'data-for': TOOLTIP_IDS.CREATE_COLLECTION,
-        'data-effect': 'solid',
-        'data-offset': "{'bottom': 10, 'left': -8}",
-        'data-tip': createTooltipText
-      };
-      const disabled = !this.props.isWritable
-        ? styles['compass-sidebar-icon-is-disabled']
-        : '';
-      const createClassName = classnames(
-        'mms-icon-add-circle',
-        styles['compass-sidebar-icon'],
-        styles['compass-sidebar-icon-create-collection'],
-        disabled
-      );
-      return (
-        <i
-          className={createClassName}
-          onClick={this.handleCreateCollectionClick}
-          {...createTooltipOptions}
-        />
-      );
+    if (this.isReadonlyDistro()) {
+      return null;
     }
+
+    const createTooltipText = this.props.isWritable
+      ? 'Create collection'
+      : this.props.description;
+    const createTooltipOptions = {
+      'data-for': TOOLTIP_IDS.CREATE_COLLECTION,
+      'data-effect': 'solid',
+      'data-offset': "{'bottom': 10, 'left': -8}",
+      'data-tip': createTooltipText
+    };
+    const disabled = !this.props.isWritable
+      ? styles['compass-sidebar-icon-is-disabled']
+      : '';
+    const createClassName = classnames(
+      'mms-icon-add-circle',
+      styles['compass-sidebar-icon'],
+      styles['compass-sidebar-icon-create-collection'],
+      disabled
+    );
+    return (
+      <i
+        className={createClassName}
+        onClick={this.handleCreateCollectionClick}
+        {...createTooltipOptions}
+      />
+    );
   }
 
   renderDropDatabaseButton() {
-    if (!this.isReadonlyDistro()) {
-      const dropTooltipText = this.props.isWritable
-        ? 'Drop database'
-        : 'Drop database is not available on a secondary node'; // TODO: Arbiter/recovering/etc
-      const dropTooltipOptions = {
-        'data-for': TOOLTIP_IDS.DROP_DATABASE,
-        'data-effect': 'solid',
-        'data-offset': "{'bottom': 10, 'left': -5}",
-        'data-tip': dropTooltipText
-      };
-      const disabled = !this.props.isWritable
-        ? styles['compass-sidebar-icon-is-disabled']
-        : '';
-      const dropClassName = classnames(
-        styles['compass-sidebar-icon'],
-        styles['compass-sidebar-icon-drop-database'],
-        'fa fa-trash-o',
-        disabled
-      );
-      return (
-        <i
-          className={dropClassName}
-          onClick={this.handleDropDatabaseClick}
-          {...dropTooltipOptions}
-        />
-      );
+    if (this.isReadonlyDistro()) {
+      return null;
     }
+    const dropTooltipText = this.props.isWritable
+      ? 'Drop database'
+      : 'Drop database is not available on a secondary node'; // TODO: Arbiter/recovering/etc
+
+    const dropTooltipOptions = {
+      'data-for': TOOLTIP_IDS.DROP_DATABASE,
+      'data-effect': 'solid',
+      'data-offset': "{'bottom': 10, 'left': -5}",
+      'data-tip': dropTooltipText
+    };
+
+    const disabled = !this.props.isWritable
+      ? styles['compass-sidebar-icon-is-disabled']
+      : '';
+    const dropClassName = classnames(
+      styles['compass-sidebar-icon'],
+      styles['compass-sidebar-icon-drop-database'],
+      'fa fa-trash-o',
+      disabled
+    );
+    return (
+      <i
+        className={dropClassName}
+        onClick={this.handleDropDatabaseClick}
+        {...dropTooltipOptions}
+      />
+    );
   }
 
   render() {
@@ -174,7 +185,7 @@ class SidebarDatabase extends PureComponent {
               styles['compass-sidebar-item-header-actions-expand']
             )}>
             <i
-              onClick={this.handleArrowClick}
+              onClick={this.handleToggleExpandedClick}
               className={this.getArrowIconClasses()}
             />
           </div>

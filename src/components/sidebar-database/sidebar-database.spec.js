@@ -32,7 +32,7 @@ describe('SidebarDatabase [Component]', () => {
   let dropDatabaseSpy;
   let dropViewSpy;
   let modifyViewSpy;
-  let onClickSpy;
+  let onExpandedToggledSpy;
 
   describe('is not active', () => {
     beforeEach(() => {
@@ -44,18 +44,15 @@ describe('SidebarDatabase [Component]', () => {
       dropViewSpy = sinon.spy();
       modifyViewSpy = sinon.spy();
 
-      onClickSpy = sinon.spy();
+      onExpandedToggledSpy = sinon.spy();
       component = mount(
         <SidebarDatabase
           _id="db"
           activeNamespace=""
           collections={DEFAULT_COLLECTIONS}
           expanded={false}
-          style={{}}
-          onClick={onClickSpy}
-          index={0}
+          onExpandedToggled={onExpandedToggledSpy}
           isWritable
-          description="description"
           openCollection={openCollectionSpy}
           dropCollection={dropCollectionSpy}
           createCollection={createCollectionSpy}
@@ -77,7 +74,7 @@ describe('SidebarDatabase [Component]', () => {
       dropViewSpy = null;
       modifyViewSpy = null;
 
-      onClickSpy = null;
+      onExpandedToggledSpy = null;
     });
     it('mounts the root element', () => {
       expect(
@@ -103,7 +100,7 @@ describe('SidebarDatabase [Component]', () => {
       component
         .find(`.${classnames(styles['compass-sidebar-icon-expand'])}`)
         .simulate('click');
-      expect(onClickSpy.called).to.equal(true);
+      expect(onExpandedToggledSpy.called).to.equal(true);
     });
     it('creates collection', () => {
       component
@@ -132,7 +129,7 @@ describe('SidebarDatabase [Component]', () => {
       dropViewSpy = sinon.spy();
       modifyViewSpy = sinon.spy();
 
-      onClickSpy = sinon.spy();
+      onExpandedToggledSpy = sinon.spy();
 
       component = mount(
         <SidebarDatabase
@@ -140,11 +137,8 @@ describe('SidebarDatabase [Component]', () => {
           activeNamespace="db"
           collections={DEFAULT_COLLECTIONS}
           expanded={false}
-          style={{}}
-          onClick={onClickSpy}
-          index={0}
+          onExpandedToggled={onExpandedToggledSpy}
           isWritable
-          description="description"
           openCollection={openCollectionSpy}
           dropCollection={dropCollectionSpy}
           createCollection={createCollectionSpy}
@@ -166,7 +160,7 @@ describe('SidebarDatabase [Component]', () => {
       dropViewSpy = null;
       modifyViewSpy = null;
 
-      onClickSpy = null;
+      onExpandedToggledSpy = null;
     });
     it('mounts the root element', () => {
       expect(
@@ -191,7 +185,7 @@ describe('SidebarDatabase [Component]', () => {
       dropViewSpy = sinon.spy();
       modifyViewSpy = sinon.spy();
 
-      onClickSpy = sinon.spy();
+      onExpandedToggledSpy = sinon.spy();
 
       component = mount(
         <SidebarDatabase
@@ -199,11 +193,8 @@ describe('SidebarDatabase [Component]', () => {
           activeNamespace=""
           collections={DEFAULT_COLLECTIONS}
           expanded={false}
-          style={{}}
-          onClick={onClickSpy}
-          index={0}
           isWritable={false}
-          description="description"
+          onExpandedToggled={onExpandedToggledSpy}
           openCollection={openCollectionSpy}
           dropCollection={dropCollectionSpy}
           createCollection={createCollectionSpy}
@@ -225,7 +216,7 @@ describe('SidebarDatabase [Component]', () => {
       dropViewSpy = null;
       modifyViewSpy = null;
 
-      onClickSpy = null;
+      onExpandedToggledSpy = null;
     });
     it('mounts the root element', () => {
       expect(
@@ -257,18 +248,15 @@ describe('SidebarDatabase [Component]', () => {
       dropViewSpy = sinon.spy();
       modifyViewSpy = sinon.spy();
 
-      onClickSpy = sinon.spy();
+      onExpandedToggledSpy = sinon.spy();
       component = mount(
         <SidebarDatabase
           _id="db"
           activeNamespace="db"
           collections={DEFAULT_COLLECTIONS}
           expanded
-          style={{}}
-          onClick={onClickSpy}
-          index={0}
           isWritable
-          description="description"
+          onExpandedToggled={onExpandedToggledSpy}
           openCollection={openCollectionSpy}
           dropCollection={dropCollectionSpy}
           createCollection={createCollectionSpy}
@@ -290,7 +278,7 @@ describe('SidebarDatabase [Component]', () => {
       dropViewSpy = null;
       modifyViewSpy = null;
 
-      onClickSpy = null;
+      onExpandedToggledSpy = null;
     });
 
     it('mounts the root element', () => {
