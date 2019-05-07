@@ -47,8 +47,6 @@
     flex-basis: auto;
   }
 
-  /* Style for the sidebar filter */
-
   &-filter {
     position: relative;
     box-shadow: 0 2px 2px rgba(0,0,0,.3);
@@ -101,8 +99,7 @@
     border: 1px solid rgba(0,0,0,.24);
   }
 
-  /* Styles for the big create database button at the bottom */
-
+  // Styles for the big create database button at the bottom
   &-button-create-database-container {
     flex-grow: 0;
     flex-shrink: 1;
@@ -237,10 +234,7 @@
 }
 
 :global {
-  /**
-   * Override `react-virtualized` so tooltips/dropdown menus 
-   * aren't cut off.
-   */
+  //Override `react-virtualized` so tooltips/dropdown menus aren't cut off.
   .ReactVirtualized__Grid__innerScrollContainer {
     overflow: initial !important;
     overflow-x: visible !important;
