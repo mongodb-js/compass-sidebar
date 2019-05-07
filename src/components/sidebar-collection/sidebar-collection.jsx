@@ -100,10 +100,13 @@ class SidebarCollection extends PureComponent {
         id={`side-bar-view-actions-${this.props._id}`}>
         <Dropdown.Toggle className="btn-xs btn" />
         <Dropdown.Menu>
-          <MenuItem onClick={this.handleModifyViewClick}>
+          <MenuItem
+            data-test-id="compass-sidebar-item-actions-ddl-view-modify"
+            onClick={this.handleModifyViewClick}>
             Modify source pipeline
           </MenuItem>
           <MenuItem
+            data-test-id="compass-sidebar-item-actions-ddl-view-drop"
             className={styles['compass-sidebar-item-actions-ddl-view-drop']}
             onClick={this.handleDropViewClick}>
             Drop View
@@ -132,8 +135,8 @@ class SidebarCollection extends PureComponent {
           className={styles['compass-sidebar-item-title']}
           data-test-id="sidebar-collection"
           title={this.props._id}>
-          {collectionName}&nbsp;
-          {this.renderIsReadonly()}
+          {collectionName}
+          {this.renderTypeIcon()}
         </div>
         <div
           className={classnames(

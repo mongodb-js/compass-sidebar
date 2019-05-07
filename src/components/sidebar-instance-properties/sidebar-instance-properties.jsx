@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { LOADING_STATE } from 'constants/sidebar-constants';
 
-import classnames from 'classnames';
 import styles from './sidebar-instance-properties.less';
 
 class SidebarInstanceProperties extends PureComponent {
@@ -11,7 +10,7 @@ class SidebarInstanceProperties extends PureComponent {
     instance: PropTypes.object
   };
 
-  handleRefresh() {
+  handleRefresh = () => {
     global.hadronApp.appRegistry.emit('refresh-data');
   }
 
@@ -28,27 +27,27 @@ class SidebarInstanceProperties extends PureComponent {
       'fa-repeat');
 
     return (
-      <div className={classnames(styles['compass-sidebar-properties'])}>
-        <div className={classnames(styles['compass-sidebar-properties-stats'])}>
-          <div className={classnames(styles['compass-sidebar-properties-stats-refresh-button-container'])}>
+      <div className={styles['compass-sidebar-properties']}>
+        <div className={styles['compass-sidebar-properties-stats']}>
+          <div className={styles['compass-sidebar-properties-stats-refresh-button-container']}>
             <button
-              onClick={this.handleRefresh.bind(this)}
-              className={classnames(styles['compass-sidebar-properties-stats-refresh-button'])}
+              onClick={this.handleRefresh}
+              className={styles['compass-sidebar-properties-stats-refresh-button']}
               data-test-id="instance-refresh-button">
               <i className={refreshName}/>
             </button>
           </div>
-          <div className={classnames(styles['compass-sidebar-properties-stats-column'])}>
+          <div className={styles['compass-sidebar-properties-stats-column']}>
             <span
               data-test-id="sidebar-db-count"
-              className={classnames(styles['compass-sidebar-properties-stats-strong-property'])}>
+              className={styles['compass-sidebar-properties-stats-strong-property']}>
               {numDbs}
             </span> DBs
           </div>
-          <div className={classnames(styles['compass-sidebar-properties-stats-column'])}>
+          <div className={styles['compass-sidebar-properties-stats-column']}>
             <span
               data-test-id="sidebar-collection-count"
-              className={classnames(styles['compass-sidebar-properties-stats-strong-property'])}>
+              className={styles['compass-sidebar-properties-stats-strong-property']}>
               {numCollections}
             </span> Collections
           </div>
