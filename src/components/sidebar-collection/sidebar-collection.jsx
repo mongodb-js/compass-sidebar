@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { TOOLTIP_IDS } from 'constants/sidebar-constants';
 import toNS from 'mongodb-ns';
 
 import classnames from 'classnames';
 import styles from './sidebar-collection.less';
+
+import DropCollectionButton from './drop-collection-button';
 
 import { Dropdown, MenuItem } from 'react-bootstrap';
 
@@ -28,18 +29,20 @@ class SidebarCollection extends PureComponent {
     dropView: PropTypes.func.isRequired
   };
 
+  isReadonlyDistro() {
+    return process.env.HADRON_READONLY === 'true';
+  }
+
+  isView() {
+    return this.props.readonly === true;
+  }
+
   handleClick = () => {
     this.props.openCollection(
       this.props._id,
       this.props.readonly,
       this.props.view_on
     );
-  };
-
-  handleDropCollectionClick = () => {
-    if (this.props.isWritable) {
-      this.props.dropCollection(this.props._id);
-    }
   };
 
   handleModifyViewClick = () => {
@@ -50,62 +53,45 @@ class SidebarCollection extends PureComponent {
     this.props.dropView(this.props._id);
   };
 
-  isReadonlyDistro() {
-    return process.env.HADRON_READONLY === 'true';
-  }
-
-  renderIsReadonly() {
-    if (this.props.readonly) {
-      return (
-        <i
-          className={classnames('fa', styles['compass-sidebar-item-view-icon'])}
-          title="Read-only View"
-          aria-hidden="true"
-          data-test-id="sidebar-collection-is-readonly"
-        />
-      );
+  /**
+   * Renders an icon next to the collection name for its type.
+   * For now, icon only added if `isView()`.
+   * @returns {React.DOMElement}
+   */
+  renderTypeIcon() {
+    if (!this.isView()) {
+      return null;
     }
-  }
 
-  renderDropCollectionButton() {
-    if (!this.isReadonlyDistro()) {
-      const tooltipText = this.props.isWritable
-        ? 'Drop collection'
-        : this.props.description;
+    const className = classnames(
+      'fa',
+      styles['compass-sidebar-item-view-icon']
+    );
 
-      const tooltipOptions = {
-        'data-for': TOOLTIP_IDS.DROP_COLLECTION,
-        'data-effect': 'solid',
-        'data-offset': "{'bottom': 10, 'left': -5}",
-        'data-tip': tooltipText
-      };
-
-      const disabled = !this.props.isWritable
-        ? styles['compass-sidebar-icon-is-disabled']
-        : '';
-
-      const dropClassName = classnames(
-        styles['compass-sidebar-icon'],
-        styles['compass-sidebar-icon-drop-collection'],
-        'fa',
-        'fa-trash-o',
-        disabled
-      );
-
-      return (
-        <i
-          className={dropClassName}
-          data-test-id="compass-sidebar-icon-drop-collection"
-          onClick={this.handleDropCollectionClick}
-          {...tooltipOptions}
-        />
-      );
-    }
+    return (
+      <i
+        className={className}
+        title="Read-only View"
+        aria-hidden="true"
+        data-test-id="sidebar-collection-is-readonly"
+      />
+    );
   }
 
   renderActions() {
-    if (this.props.readonly === false) {
-      return this.renderDropCollectionButton();
+    if (this.isReadonlyDistro()) {
+      return null;
+    }
+
+    if (!this.isView()) {
+      return (
+        <DropCollectionButton
+          _id={this.props._id}
+          isWritable={this.props.isWritable}
+          description={this.props.description}
+          dropCollection={this.props.dropCollection}
+        />
+      );
     }
 
     return (
