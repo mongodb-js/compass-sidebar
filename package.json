@@ -19,8 +19,7 @@
     "check": "mongodb-js-precommit './src/**/*{.js,.jsx}' './test/**/*.js' './electron/**/*.js' './config/**/*{.js,.jsx}'",
     "link-plugin": "./scripts/link.sh",
     "unlink-plugin": "./scripts/unlink.sh",
-    "prepublish": "npm run compile",
-    "storybook": "start-storybook -p 9001 -c .storybook"
+    "prepublishOnly": "npm run compile"
   },
   "precommit": [
     "check"
@@ -45,7 +44,6 @@
   "devDependencies": {
     "@mongodb-js/compass-app-stores": "^1.0.8",
     "@mongodb-js/compass-deployment-awareness": "^6.4.1",
-    "@storybook/react": "^3.2.0",
     "autoprefixer": "^9.4.6",
     "babel-cli": "^6.10.1",
     "babel-core": "^6.24.1",
