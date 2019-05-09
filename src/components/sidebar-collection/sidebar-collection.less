@@ -26,21 +26,23 @@
     cursor: pointer;
     transition: all 180ms ease;
     flex: 1;
-    flex-basis: auto;
+    color: @pw;
+    flex-grow: 1;
+  }
+
+  &-actions .compass-sidebar-icon {
+    margin-right: 8px;
+  }
+
+  &-title {
     padding-left: 37px;
     text-overflow: ellipsis;
-    color: @pw;
     white-space: nowrap;
   }
 
   &-actions {
-    flex-grow: 0;
-    flex-shrink: 0;
-
     &-ddl {
-      flex-shrink: 1;
-      flex-basis: auto;
-      padding: 0 0 0 8px;
+      padding: 0;
     }
   }
 
@@ -55,7 +57,6 @@
 
 
   &-actions-ddl .compass-sidebar-icon {
-    margin-right: 8px;
     display: none;
     color: @compass-sidebar-default-text-color;
   }
