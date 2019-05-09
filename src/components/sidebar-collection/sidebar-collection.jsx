@@ -139,7 +139,7 @@ class SidebarCollection extends PureComponent {
           data-test-id="sidebar-collection"
           title={this.props._id}>
           {collectionName}
-          {/* {this.renderTypeIcon()} */}
+          {this.renderTypeIcon()}
         </div>
         <div
           className={classnames(
