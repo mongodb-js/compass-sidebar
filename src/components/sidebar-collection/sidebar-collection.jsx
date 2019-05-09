@@ -7,7 +7,7 @@ import styles from './sidebar-collection.less';
 
 import DropCollectionButton from './drop-collection-button';
 
-import { Dropdown, MenuItem } from 'react-bootstrap';
+import ModifyViewButton from './modify-view-button';
 
 class SidebarCollection extends PureComponent {
   static displayName = 'SidebarCollection';
@@ -82,11 +82,11 @@ class SidebarCollection extends PureComponent {
       return null;
     }
     return (
-      <DropCollectionButton
+      <ModifyViewButton
         _id={this.props._id}
         isWritable={this.props.isWritable}
         description={this.props.description}
-        dropCollection={this.props.dropCollection}
+        modifyView={this.props.modifyView}
       />
     );
   }
@@ -130,13 +130,13 @@ class SidebarCollection extends PureComponent {
     //     </Dropdown.Toggle>
     //     <Dropdown.Menu>
     //       <MenuItem
-    //         data-test-id="compass-sidebar-item-actions-ddl-view-modify"
+    //         data-test-id="compass-sidebar-item-actions-ddl-modify-view"
     //         onClick={this.handleModifyViewClick}>
     //         Modify source pipeline
     //       </MenuItem>
     //       <MenuItem
-    //         data-test-id="compass-sidebar-item-actions-ddl-view-drop"
-    //         className={styles['compass-sidebar-item-actions-ddl-view-drop']}
+    //         data-test-id="compass-sidebar-item-actions-ddl-drop-view"
+    //         className={styles['compass-sidebar-item-actions-ddl-drop-view']}
     //         onClick={this.handleDropViewClick}>
     //         Drop View
     //       </MenuItem>
@@ -163,7 +163,8 @@ class SidebarCollection extends PureComponent {
           onClick={this.handleClick}
           className={styles['compass-sidebar-item-title']}
           data-test-id="sidebar-collection"
-          title={this.props._id}>
+          title={this.props._id}
+        >
           {collectionName}
           {this.renderTypeIcon()}
         </div>
@@ -171,7 +172,8 @@ class SidebarCollection extends PureComponent {
           className={classnames(
             styles['compass-sidebar-item-actions'],
             styles['compass-sidebar-item-actions-ddl']
-          )}>
+          )}
+        >
           {this.renderModifyAction()}
           {this.renderDropAction()}
         </div>

@@ -171,7 +171,7 @@ describe('SidebarCollection [Component]', () => {
     });
     it('triggers drop view when clicked', () => {
       component
-        .find('[data-test-id="compass-sidebar-item-actions-ddl-view-drop"]')
+        .find('[data-test-id="compass-sidebar-item-actions-ddl-drop-view"]')
         .at(1)
         .simulate('click');
       expect(dropViewSpy.called).to.equal(true);
@@ -180,7 +180,7 @@ describe('SidebarCollection [Component]', () => {
 
     it('triggers modify view when clicked', () => {
       component
-        .find('[data-test-id="compass-sidebar-item-actions-ddl-view-modify"]')
+        .find('[data-test-id="compass-sidebar-item-actions-ddl-modify-view"]')
         .at(1)
         .simulate('click');
       expect(modifyViewSpy.called).to.equal(true);
