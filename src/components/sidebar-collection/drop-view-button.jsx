@@ -6,28 +6,28 @@ import styles from './sidebar-collection.less';
 
 import { TOOLTIP_IDS } from 'constants/sidebar-constants';
 
-class ModifyViewButton extends PureComponent {
-  static displayName = 'SidebarModifyViewButton';
+class DropViewButton extends PureComponent {
+  static displayName = 'SidebarDropViewButton';
   static propTypes = {
     _id: PropTypes.string.isRequired,
     isWritable: PropTypes.bool.isRequired,
     description: PropTypes.string.isRequired,
-    modifyView: PropTypes.func.isRequired
+    dropView: PropTypes.func.isRequired
   };
 
-  handleClick = () => {
+  handleDropViewClick = () => {
     if (this.props.isWritable) {
-      this.props.modifyView(this.props._id);
+      this.props.dropView(this.props._id);
     }
   };
 
   render() {
     const tooltipText = this.props.isWritable
-      ? 'Modify view'
+      ? 'Drop view'
       : this.props.description;
 
     const tooltipProps = {
-      'data-for': TOOLTIP_IDS.MODIFY_VIEW,
+      'data-for': TOOLTIP_IDS.DROP_VIEW,
       'data-effect': 'solid',
       'data-offset': "{'bottom': 10, 'left': -5}",
       'data-tip': tooltipText
@@ -39,21 +39,21 @@ class ModifyViewButton extends PureComponent {
 
     const dropClassName = classnames(
       styles['compass-sidebar-icon'],
-      styles['compass-sidebar-icon-modify-view'],
+      styles['compass-sidebar-icon-drop-view'],
       'fa',
-      'fa-pencil-square-o',
+      'fa-trash-o',
       disabled
     );
 
     return (
       <i
         className={dropClassName}
-        data-test-id="compass-sidebar-icon-modify-view"
-        onClick={this.handleDropCollectionClick}
+        data-test-id="compass-sidebar-icon-drop-view"
+        onClick={this.handleDropViewClick}
         {...tooltipProps}
       />
     );
   }
 }
 
-export default ModifyViewButton;
+export default DropViewButton;

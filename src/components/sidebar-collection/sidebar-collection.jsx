@@ -9,6 +9,8 @@ import DropCollectionButton from './drop-collection-button';
 
 import ModifyViewButton from './modify-view-button';
 
+import DropViewButton from './drop-view-button';
+
 class SidebarCollection extends PureComponent {
   static displayName = 'SidebarCollection';
   static propTypes = {
@@ -96,13 +98,13 @@ class SidebarCollection extends PureComponent {
       return null;
     }
 
-    if (!this.isView()) {
+    if (this.isView()) {
       return (
-        <DropCollectionButton
+        <DropViewButton
           _id={this.props._id}
           isWritable={this.props.isWritable}
           description={this.props.description}
-          dropCollection={this.props.dropCollection}
+          dropView={this.props.dropView}
         />
       );
     }
@@ -112,37 +114,9 @@ class SidebarCollection extends PureComponent {
         _id={this.props._id}
         isWritable={this.props.isWritable}
         description={this.props.description}
-        dropCollection={this.props.modifyView}
+        dropCollection={this.props.dropCollection}
       />
     );
-
-    // return (
-    //   <Dropdown
-    //     bsSize="xs"
-    //     bsStyle="ellipsis"
-    //     className={classnames(
-    //       styles['compass-sidebar-icon'],
-    //       styles['compass-sidebar-item-actions-ddl-view-dropdown']
-    //     )}
-    //     id={`side-bar-view-actions-${this.props._id}`}>
-    //     <Dropdown.Toggle noCaret bsSize="xs">
-    //       <i className="mms-icon-ellipsis" aria-hidden />
-    //     </Dropdown.Toggle>
-    //     <Dropdown.Menu>
-    //       <MenuItem
-    //         data-test-id="compass-sidebar-item-actions-ddl-modify-view"
-    //         onClick={this.handleModifyViewClick}>
-    //         Modify source pipeline
-    //       </MenuItem>
-    //       <MenuItem
-    //         data-test-id="compass-sidebar-item-actions-ddl-drop-view"
-    //         className={styles['compass-sidebar-item-actions-ddl-drop-view']}
-    //         onClick={this.handleDropViewClick}>
-    //         Drop View
-    //       </MenuItem>
-    //     </Dropdown.Menu>
-    //   </Dropdown>
-    // );
   }
 
   render() {
@@ -163,17 +137,15 @@ class SidebarCollection extends PureComponent {
           onClick={this.handleClick}
           className={styles['compass-sidebar-item-title']}
           data-test-id="sidebar-collection"
-          title={this.props._id}
-        >
+          title={this.props._id}>
           {collectionName}
-          {this.renderTypeIcon()}
+          {/* {this.renderTypeIcon()} */}
         </div>
         <div
           className={classnames(
             styles['compass-sidebar-item-actions'],
             styles['compass-sidebar-item-actions-ddl']
-          )}
-        >
+          )}>
           {this.renderModifyAction()}
           {this.renderDropAction()}
         </div>
