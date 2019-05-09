@@ -106,10 +106,8 @@ export const openCollection = (ns, isReadonly, viewOn) => {
  * @param {String} databaseName Which database the collection will be created under.
  * @returns {Function} The thunk
  */
-export const createCollection = (databaseName) => {
-  return (dispatch) => {
-    dispatch(appRegistryEmit('open-create-collection', databaseName));
-  };
+export const createCollection = (databaseName) => (dispatch) => {
+  dispatch(appRegistryEmit('open-create-collection', databaseName));
 };
 
 /**
@@ -142,10 +140,9 @@ export const openDatabase = (ns) => {
  * @emits open-create-database
  * @returns {Function} The thunk
  */
-export const createDatabase = () => {
-  return (dispatch) => {
-    dispatch(appRegistryEmit('open-create-database'));
-  };
+
+export const createDatabase = () => (dispatch) => {
+  dispatch(appRegistryEmit('open-create-database'));
 };
 
 /**
@@ -155,10 +152,8 @@ export const createDatabase = () => {
  * @param {String} ns The database name.
  * @returns {Function} The thunk
  */
-export const dropDatabase = (ns) => {
-  return (dispatch) => {
-    dispatch(appRegistryEmit('open-drop-database', ns));
-  };
+export const dropDatabase = (ns) => (dispatch) => {
+  dispatch(appRegistryEmit('open-drop-database', ns));
 };
 
 /**
@@ -168,10 +163,8 @@ export const dropDatabase = (ns) => {
  * @param {String} ns The view namespace string.
  * @returns {Function} The thunk
  */
-export const dropView = (ns) => {
-  return (dispatch) => {
-    dispatch(appRegistryEmit('open-drop-view', ns));
-  };
+export const dropView = (ns) => (dispatch) => {
+  dispatch(appRegistryEmit('open-drop-view', ns));
 };
 
 /**
@@ -181,10 +174,8 @@ export const dropView = (ns) => {
  * @param {String} ns The view namespace string.
  * @returns {Function} The thunk
  */
-export const modifyView = (ns) => {
-  return (dispatch) => {
-    dispatch(appRegistryEmit('open-modify-view', ns));
-  };
+export const modifyView = (ns) => (dispatch) => {
+  dispatch(appRegistryEmit('open-modify-view', ns));
 };
 
 export default rootReducer;
