@@ -49,7 +49,7 @@ class ModifyViewButton extends PureComponent {
       <i
         className={dropClassName}
         data-test-id="compass-sidebar-icon-modify-view"
-        onClick={this.handleDropCollectionClick}
+        onClick={this.handleClick}
         {...tooltipProps}
       />
     );
