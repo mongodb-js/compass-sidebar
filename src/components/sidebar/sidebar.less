@@ -1,15 +1,15 @@
 @import (reference) "~less/compass/_theme.less";
 
-@compass-sidebar-default-text-color: #9DA4AA;
-@compass-sidebar-base-background-color: #4C5259;
-@compass-sidebar-lite-background-color: #565E65;
-@compass-sidebar-active-background-color: #6D7984;
-@compass-sidebar-hover-background-color: #42494f;
+@compass-sidebar-default-text-color: @gray6;
+@compass-sidebar-base-background-color: @gray4;
+@compass-sidebar-lite-background-color: @gray5; 
+@compass-sidebar-active-background-color: @gray2;
+@compass-sidebar-hover-background-color: @gray2; 
 @compass-sidebar-transition-time: 400ms;
 
 .compass-sidebar {
   background: @compass-sidebar-base-background-color;
-  color: #bfbfbe;
+  color: @gray4; //#bfbfbe
   display: flex;
   flex-direction: column;
   flex-grow: 0;
@@ -60,15 +60,16 @@
     position: absolute;
     top: 8px;
     left: 11px;
-    color: #fff;
+    color: @pw;
     cursor: pointer;
   }
 
   &-search-input {
     padding: 7px 5px 5px 36px;
     height: auto;
-    background: @compass-sidebar-hover-background-color;
-    color: #fff;
+    background: @compass-sidebar-base-background-color;
+    @compass-sidebar-base-background-color: darken(hsl(201, 11%, 41%), 7%);
+    color: @pw;
     width: 100%;
     border: none;
     font-size: 14px;
@@ -82,7 +83,7 @@
     transition: color 180ms ease-out;
   }
   &-search-input:focus::-webkit-input-placeholder {
-    color: #fff;
+    color: @pw;
   }
 
   &-content {
@@ -115,7 +116,8 @@
   }
 
   &-button-create-database {
-    background-color: @compass-sidebar-hover-background-color;
+    background: @compass-sidebar-base-background-color;
+    @compass-sidebar-base-background-color: darken(hsl(201, 11%, 41%), 7%);
     border-radius: 14px;
     border: 0;
     color: @pw;
@@ -131,6 +133,7 @@
     transition: all 180ms ease;
     white-space: nowrap;
     text-align: center;
+    padding-left: 6px;
 
     .plus-button {
       opacity: 0;
@@ -141,7 +144,8 @@
 
   &-button-create-database:hover {
     width: 100%;
-    background-color: @compass-sidebar-active-background-color;
+    background: @compass-sidebar-base-background-color;
+    @compass-sidebar-base-background-color: lighten(hsl(201, 11%, 41%), 10%);
 
   }
 
@@ -152,7 +156,8 @@
   }
 
   &-button-create-database.compass-sidebar-button-is-disabled {
-    background-color: fade(@compass-sidebar-active-background-color, 40%);
+    background-color: fade(@compass-sidebar-active-background-color, 0.4);
+    opacity: 0.4;
     color: fade(@pw, 40%);
     cursor: not-allowed;
   }
@@ -213,7 +218,7 @@
 
   .compass-sidebar-search-icon {
     top: 10px;
-    color: #fff;
+    color: @pw;
   }
 
   .compass-sidebar-button-create-database-container {

@@ -1,6 +1,7 @@
 @import (reference) "~less/compass/_theme.less";
 
-@compass-sidebar-default-text-color: #9DA4AA;
+@compass-sidebar-default-text-color: @gray6;
+@compass-sidebar-base-background-color: @gray4;
 
 .compass-sidebar-properties {
   margin: 0;
@@ -30,7 +31,7 @@
 
     &-strong-property {
       font-weight: bold;
-      color: #fff;
+      color: @pw;
     }
 
     &-refresh-button-container {
@@ -42,7 +43,7 @@
     }
 
     &-refresh-button {
-      color: #ebebed;
+      color: @gray7;
       background: none;
       border: none;
       border-radius: 12px;
@@ -53,8 +54,9 @@
       transition: all 150ms ease;
 
       &:hover {
-        background: #42494f;
-        color: #fff;
+        background: @compass-sidebar-base-background-color;
+        @compass-sidebar-base-background-color: lighten(hsl(201, 11%, 41%), 10%);
+        color: @pw;
       }
     }
   }
