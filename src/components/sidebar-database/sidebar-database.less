@@ -1,8 +1,7 @@
 @import (reference) "~less/compass/_theme.less";
 
 @compass-sidebar-default-text-color: @gray6;
-@compass-sidebar-active-background-color: @gray2;
-@compass-sidebar-hover-background-color: @gray2; 
+@compass-sidebar-base-background-color: @gray4;
 
 .compass-sidebar-item {
   &-is-top-level {}
@@ -69,7 +68,8 @@
     /* :hover styles */
 
     &:hover {
-      background-color: @compass-sidebar-hover-background-color;
+      background: @compass-sidebar-base-background-color;
+      @compass-sidebar-base-background-color: lighten(hsl(201, 11%, 41%), 10%);
       color: @pw;
     }
 
@@ -81,7 +81,8 @@
 
     &-is-active,
     &-is-active:hover {
-      background-color: @compass-sidebar-active-background-color;
+      background: @compass-sidebar-base-background-color;
+      @compass-sidebar-base-background-color: lighten(hsl(201, 11%, 41%), 20%); // item-is-active
     }
 
     &-is-active .compass-sidebar-item-header-actions,

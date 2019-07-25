@@ -2,14 +2,12 @@
 
 @compass-sidebar-default-text-color: @gray6;
 @compass-sidebar-base-background-color: @gray4;
-@compass-sidebar-lite-background-color: @gray5; 
-@compass-sidebar-active-background-color: @gray2;
-@compass-sidebar-hover-background-color: @gray2; 
+@compass-sidebar-lite-background-color: @gray5;
 @compass-sidebar-transition-time: 400ms;
 
 .compass-sidebar {
   background: @compass-sidebar-base-background-color;
-  color: @gray4; //#bfbfbe
+  color: @pw;
   display: flex;
   flex-direction: column;
   flex-grow: 0;
@@ -68,7 +66,7 @@
     padding: 7px 5px 5px 36px;
     height: auto;
     background: @compass-sidebar-base-background-color;
-    @compass-sidebar-base-background-color: darken(hsl(201, 11%, 41%), 7%);
+    @compass-sidebar-base-background-color: darken(hsl(201, 11%, 41%), 5%);
     color: @pw;
     width: 100%;
     border: none;
@@ -100,7 +98,7 @@
     }
   }
   *::-webkit-scrollbar-thumb {
-    background-color: @compass-sidebar-lite-background-color;
+    background-color: @compass-sidebar-base-background-color;
     border: 1px solid rgba(0,0,0,.24);
   }
 
@@ -117,7 +115,7 @@
 
   &-button-create-database {
     background: @compass-sidebar-base-background-color;
-    @compass-sidebar-base-background-color: darken(hsl(201, 11%, 41%), 7%);
+    @compass-sidebar-base-background-color: darken(hsl(201, 11%, 41%), 5%);
     border-radius: 14px;
     border: 0;
     color: @pw;
@@ -156,7 +154,7 @@
   }
 
   &-button-create-database.compass-sidebar-button-is-disabled {
-    background-color: fade(@compass-sidebar-active-background-color, 0.4);
+    background-color: fade(@compass-sidebar-base-background-color, 0.4);
     opacity: 0.4;
     color: fade(@pw, 40%);
     cursor: not-allowed;
