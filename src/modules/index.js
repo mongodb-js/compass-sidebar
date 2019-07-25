@@ -1,5 +1,7 @@
 import { combineReducers } from 'redux';
 
+import appRegistry from 'mongodb-redux-common/app-registry';
+import detailsPlugins from 'modules/details-plugins';
 import databases, {
   INITIAL_STATE as DATABASES_INITIAL_STATE
 } from 'modules/databases';
@@ -15,6 +17,9 @@ import filterRegex, {
 import isCollapsed, {
   INITIAL_STATE as IS_COLLAPSED_INITIAL_STATE
 } from 'modules/is-collapsed';
+import isDetailsExpanded, {
+  INITIAL_STATE as IS_DETAILS_EXPANDED_INITIAL_STATE
+} from 'modules/is-details-expanded';
 import isWritable, {
   INITIAL_STATE as IS_WRITABLE_INITIAL_STATE
 } from 'modules/is-writable';
@@ -22,17 +27,28 @@ import isDataLake, {
   INITIAL_STATE as DL_INITIAL_STATE
 } from './is-data-lake';
 import { RESET } from 'modules/reset';
+import isGenuineMongoDB, {
+  INITIAL_STATE as GENUINE_IS
+} from 'modules/is-genuine-mongodb';
+import isGenuineMongoDBVisible, {
+  INITIAL_STATE as IS_VISIBLE_IS
+} from 'modules/is-genuine-mongodb-visible';
 
 /**
  * The reducer.
  */
 const reducer = combineReducers({
+  appRegistry,
   databases,
   description,
+  detailsPlugins,
   instance,
   filterRegex,
   isCollapsed,
+  isDetailsExpanded,
   isWritable,
+  isGenuineMongoDB,
+  isGenuineMongoDBVisible,
   isDataLake
 });
 
@@ -53,7 +69,10 @@ const rootReducer = (state, action) => {
       instance: INSTANCE_INITIAL_STATE,
       filterRegex: FILTER_REGEX_INITIAL_STATE,
       isCollapsed: IS_COLLAPSED_INITIAL_STATE,
+      isDetailsExpanded: IS_DETAILS_EXPANDED_INITIAL_STATE,
       isWritable: IS_WRITABLE_INITIAL_STATE,
+      isGenuineMongoDB: GENUINE_IS,
+      isGenuineMongoDBVisible: IS_VISIBLE_IS,
       isDataLake: DL_INITIAL_STATE
     };
   }

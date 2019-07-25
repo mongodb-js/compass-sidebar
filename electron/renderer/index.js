@@ -9,6 +9,7 @@ import { activate as appActivate } from '@mongodb-js/compass-app-stores';
 import { activate as headerActivate } from '@mongodb-js/compass-instance-header';
 import { activate as awarenessActivate } from '@mongodb-js/compass-deployment-awareness';
 import { activate as versionActivate } from '@mongodb-js/compass-server-version';
+import { activate as sshActivate } from '@mongodb-js/compass-ssh-tunnel-status';
 import InstanceModel from 'mongodb-instance-model';
 
 // Import global less file. Note: these styles WILL NOT be used in compass, as compass provides its own set
@@ -28,6 +29,7 @@ appActivate(appRegistry);
 headerActivate(appRegistry);
 awarenessActivate(appRegistry);
 versionActivate(appRegistry);
+sshActivate(appRegistry);
 
 appRegistry.onActivated();
 
@@ -67,9 +69,18 @@ const connection = new Connection({
 });
 const dataService = new DataService(connection);
 
+global.hadronApp.instance.genuineMongoDB = { isGenuine: false, dbType: 'cosmos' };
+
+const state = {
+  instance: global.hadronApp.instance
+};
+
 DeploymentStateStore.setToInitial();
 dataService.connect((error, ds) => {
+  ds.client.model.ssh_tunnel = 'USER_PASSWORD';
+  ds.client.model.ssh_tunnel_hostname = '123.45.67.89';
   appRegistry.emit('data-service-connected', error, ds);
+  appRegistry.emit('instance-refreshed', state);
 });
 
 if (module.hot) {

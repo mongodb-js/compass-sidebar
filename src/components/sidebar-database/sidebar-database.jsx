@@ -12,6 +12,7 @@ class SidebarDatabase extends PureComponent {
   static propTypes = {
     _id: PropTypes.string.isRequired,
     activeNamespace: PropTypes.string.isRequired,
+    globalAppRegistryEmit: PropTypes.func.isRequired,
     collections: PropTypes.array.isRequired,
     expanded: PropTypes.bool.isRequired,
     style: PropTypes.object.isRequired,
@@ -35,6 +36,7 @@ class SidebarDatabase extends PureComponent {
           pipeline: c.pipeline,
           type: c.type,
           activeNamespace: this.props.activeNamespace,
+          globalAppRegistryEmit: this.props.globalAppRegistryEmit,
           isWritable: this.props.isWritable,
           description: this.props.description,
           isDataLake: this.props.isDataLake,
@@ -58,7 +60,7 @@ class SidebarDatabase extends PureComponent {
   }
 
   handleDBClick(db) {
-    global.hadronApp.appRegistry.emit('select-database', db);
+    this.props.globalAppRegistryEmit('select-database', db);
     const ipc = require('hadron-ipc');
     ipc.call('window:hide-collection-submenu');
   }
@@ -72,14 +74,14 @@ class SidebarDatabase extends PureComponent {
   handleCreateCollectionClick(isWritable) {
     if (isWritable) {
       const databaseName = this.props._id;
-      global.hadronApp.appRegistry.emit('open-create-collection', databaseName);
+      this.props.globalAppRegistryEmit('open-create-collection', databaseName);
     }
   }
 
   handleDropDBClick(isWritable) {
     if (isWritable) {
       const databaseName = this.props._id;
-      global.hadronApp.appRegistry.emit('open-drop-database', databaseName);
+      this.props.globalAppRegistryEmit('open-drop-database', databaseName);
     }
   }
 

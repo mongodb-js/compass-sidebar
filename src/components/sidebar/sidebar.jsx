@@ -4,16 +4,22 @@ import PropTypes from 'prop-types';
 import cloneDeep from 'lodash.clonedeep';
 import ReactTooltip from 'react-tooltip';
 import { AutoSizer, List } from 'react-virtualized';
+import { globalAppRegistryEmit } from 'mongodb-redux-common/app-registry';
 
 import classnames from 'classnames';
 import styles from './sidebar.less';
 
+import SidebarTitle from 'components/sidebar-title';
+import SidebarInstance from 'components/sidebar-instance';
 import SidebarDatabase from 'components/sidebar-database';
-import SidebarInstanceProperties from 'components/sidebar-instance-properties';
+import NonGenuineWarningModal from 'components/non-genuine-warning-modal';
 
 import { toggleIsCollapsed } from 'modules/is-collapsed';
+import { toggleIsDetailsExpanded } from 'modules/is-details-expanded';
+import { toggleIsGenuineMongoDBVisible } from 'modules/is-genuine-mongodb-visible';
 import { filterDatabases, changeDatabases } from 'modules/databases';
 import { changeFilterRegex } from 'modules/filter-regex';
+import { openLink } from 'modules/link';
 
 import { TOOLTIP_IDS } from 'constants/sidebar-constants';
 
@@ -29,20 +35,22 @@ class Sidebar extends PureComponent {
     filterRegex: PropTypes.any.isRequired,
     instance: PropTypes.object.isRequired,
     isCollapsed: PropTypes.bool.isRequired,
+    isDetailsExpanded: PropTypes.bool.isRequired,
     isWritable: PropTypes.bool.isRequired,
     onCollapse: PropTypes.func.isRequired,
     toggleIsCollapsed: PropTypes.func.isRequired,
+    toggleIsDetailsExpanded: PropTypes.func.isRequired,
+    detailsPlugins: PropTypes.array.isRequired,
     filterDatabases: PropTypes.func.isRequired,
     changeDatabases: PropTypes.func.isRequired,
+    openLink: PropTypes.func.isRequired,
     changeFilterRegex: PropTypes.func.isRequired,
-    isDataLake: PropTypes.bool.isRequired
+    isDataLake: PropTypes.bool.isRequired,
+    isGenuineMongoDB: PropTypes.bool.isRequired,
+    isGenuineMongoDBVisible: PropTypes.bool.isRequired,
+    toggleIsGenuineMongoDBVisible: PropTypes.func.isRequired,
+    globalAppRegistryEmit: PropTypes.func.isRequired
   };
-
-  constructor(props) {
-    super(props);
-    this.StatusActions = global.hadronApp.appRegistry.getAction('Status.Actions');
-    this.InstanceHeader = global.hadronApp.appRegistry.getComponent('InstanceHeader.Component');
-  }
 
   componentWillReceiveProps() {
     this.list.recomputeRowHeights();
@@ -54,18 +62,10 @@ class Sidebar extends PureComponent {
     ReactTooltip.rebuild();
   }
 
-  getSidebarClasses() {
-  }
-
-  getToggleClasses() {
-  }
-
   handleCollapse() {
     if (!this.props.isCollapsed) {
       this.props.onCollapse();
-      if (this.StatusActions) {
-        this.StatusActions.configure({ sidebar: false });
-      }
+      this.props.globalAppRegistryEmit('compass:status:configure', { sidebar: false });
       this.props.toggleIsCollapsed(!this.props.isCollapsed);
     }
   }
@@ -73,9 +73,7 @@ class Sidebar extends PureComponent {
   handleExpand() {
     if (this.props.isCollapsed) {
       this.props.onCollapse();
-      if (this.StatusActions) {
-        this.StatusActions.configure({ sidebar: false });
-      }
+      this.props.globalAppRegistryEmit('compass:status:configure', { sidebar: true });
       this.props.toggleIsCollapsed(!this.props.isCollapsed);
     }
   }
@@ -100,7 +98,7 @@ class Sidebar extends PureComponent {
 
   handleCreateDatabaseClick(isWritable) {
     if (isWritable) {
-      global.hadronApp.appRegistry.emit('open-create-database');
+      this.props.globalAppRegistryEmit('open-create-database');
     }
   }
 
@@ -161,8 +159,7 @@ class Sidebar extends PureComponent {
       return (
         <div
           className={classnames(styles['compass-sidebar-button-create-database-container'])}
-          {...tooltipOptions}
-        >
+          {...tooltipOptions}>
           <button
             className={className}
             title="Create Database"
@@ -187,6 +184,7 @@ class Sidebar extends PureComponent {
       collections: db.collections,
       expanded: this.props.databases.expandedDblist[db._id],
       onClick: this._onDBClick.bind(this),
+      globalAppRegistryEmit: this.props.globalAppRegistryEmit,
       key,
       style,
       index,
@@ -227,7 +225,6 @@ class Sidebar extends PureComponent {
     return (
       <div
         className={classnames(styles['compass-sidebar'], styles[collapsed])}
-        data-test-id="instance-sidebar"
         onClick={this.handleExpand.bind(this)}>
         <button
           className={classnames(styles['compass-sidebar-toggle'], 'btn btn-default btn-sm')}
@@ -235,10 +232,18 @@ class Sidebar extends PureComponent {
           data-test-id="toggle-sidebar">
           <i className={collapsedButton}/>
         </button>
-        <this.InstanceHeader sidebarCollapsed={this.props.isCollapsed} />
-        <SidebarInstanceProperties
+        <SidebarTitle
+          name="My Cluster"
+          isSidebarCollapsed={this.props.isCollapsed}
+          globalAppRegistryEmit={this.props.globalAppRegistryEmit} />
+        <SidebarInstance
           instance={this.props.instance}
-          activeNamespace={this.props.databases.activeNamespace} />
+          isExpanded={this.props.isDetailsExpanded}
+          isSidebarCollapsed={this.props.isCollapsed}
+          detailsPlugins={this.props.detailsPlugins}
+          isGenuineMongoDB={this.props.isGenuineMongoDB}
+          toggleIsDetailsExpanded={this.props.toggleIsDetailsExpanded}
+          globalAppRegistryEmit={this.props.globalAppRegistryEmit} />
         <div
           className={classnames(styles['compass-sidebar-filter'])}
           onClick={this.handleSearchFocus.bind(this)}>
@@ -247,12 +252,16 @@ class Sidebar extends PureComponent {
             data-test-id="sidebar-filter-input"
             ref="filter"
             className={classnames(styles['compass-sidebar-search-input'])}
-            placeholder="filter"
+            placeholder="Filter your data"
             onChange={this.handleFilter.bind(this)} />
         </div>
         <div className={classnames(styles['compass-sidebar-content'])}>
           {this.renderSidebarScroll()}
         </div>
+        <NonGenuineWarningModal
+          isVisible={this.props.isGenuineMongoDBVisible}
+          toggleIsVisible={this.props.toggleIsGenuineMongoDBVisible}
+          openLink={this.props.openLink} />
         {this.renderCreateDatabaseButton()}
         <ReactTooltip id={TOOLTIP_IDS.CREATE_DATABASE_BUTTON} />
         <ReactTooltip id={TOOLTIP_IDS.CREATE_COLLECTION} />
@@ -274,13 +283,17 @@ class Sidebar extends PureComponent {
 const mapStateToProps = (state, ownProps) => ({
   databases: state.databases,
   description: state.description,
+  detailsPlugins: state.detailsPlugins,
   filterRegex: state.filterRegex,
   instance: state.instance,
   isCollapsed: state.isCollapsed,
   isDblistExpanded: state.isDblistExpanded,
+  isDetailsExpanded: state.isDetailsExpanded,
   isWritable: state.isWritable,
   onCollapse: ownProps.onCollapse,
-  isDataLake: state.isDataLake
+  isDataLake: state.isDataLake,
+  isGenuineMongoDB: state.isGenuineMongoDB,
+  isGenuineMongoDBVisible: state.isGenuineMongoDBVisible
 });
 
 /**
@@ -291,9 +304,13 @@ const MappedSidebar = connect(
   mapStateToProps,
   {
     toggleIsCollapsed,
+    toggleIsDetailsExpanded,
+    toggleIsGenuineMongoDBVisible,
     filterDatabases,
     changeDatabases,
-    changeFilterRegex
+    changeFilterRegex,
+    openLink,
+    globalAppRegistryEmit
   },
 )(Sidebar);
 

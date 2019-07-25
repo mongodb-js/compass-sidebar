@@ -15,6 +15,7 @@ class SidebarCollection extends PureComponent {
     power_of_two: PropTypes.bool.isRequired,
     readonly: PropTypes.bool.isRequired,
     activeNamespace: PropTypes.string.isRequired,
+    globalAppRegistryEmit: PropTypes.func.isRequired,
     isWritable: PropTypes.bool.isRequired,
     description: PropTypes.string.isRequired,
     view_on: PropTypes.any, // undefined or string if view
@@ -31,18 +32,14 @@ class SidebarCollection extends PureComponent {
   onDrop = () => {
     const databaseName = this.props.database;
     const collectionName = this.getCollectionName();
-    global.hadronApp.appRegistry.emit(
-      'open-drop-collection',
-      databaseName,
-      collectionName
-    );
+    this.props.globalAppRegistryEmit('open-drop-collection', databaseName, collectionName);
   }
 
   /**
    * Handle duplicate view.
    */
   onDuplicateView = () => {
-    global.hadronApp.appRegistry.emit(
+    this.props.globalAppRegistryEmit(
       'open-create-view', {
         source: this.props.view_on,
         pipeline: this.props.pipeline,
@@ -90,15 +87,12 @@ class SidebarCollection extends PureComponent {
    */
   collectionMetadata(editViewName) {
     const source = this.props.collections.find((coll) => {
-      console.log('coll', coll);
-      console.log('ns coll', toNS(coll._id).collection);
-      console.log('props', this.props);
       return toNS(coll._id).collection === this.props.view_on;
     });
     return {
       namespace: this.props._id,
       isReadonly: this.props.readonly,
-      sourceName: source ? `${this.props.database}.${this.props.view_on}` : null,
+      sourceName: this.props.readonly ? `${this.props.database}.${this.props.view_on}` : null,
       isSourceReadonly: source ? source.readonly : false,
       sourceViewOn: source ? `${this.props.database}.${source.view_on}` : null,
       sourcePipeline: this.props.pipeline,
@@ -131,7 +125,7 @@ class SidebarCollection extends PureComponent {
    * @param {String} editViewSource - The modify source name.
    */
   showCollection(eventName, editViewSource) {
-    global.hadronApp.appRegistry.emit(eventName, this.collectionMetadata(editViewSource));
+    this.props.globalAppRegistryEmit(eventName, this.collectionMetadata(editViewSource));
     if (!this.props.isDataLake) {
       const ipc = require('hadron-ipc');
       ipc.call('window:show-collection-submenu');
