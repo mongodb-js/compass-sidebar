@@ -1,8 +1,11 @@
 @import (reference) "~less/compass/_theme.less";
 
-@compass-sidebar-default-text-color: @gray6;
-@compass-sidebar-base-background-color: @gray4;
-@compass-sidebar-lite-background-color: @gray5;
+@compass-sidebar-default-text-color: @gray5;
+@compass-sidebar-base-background-color: @gray2;
+@compass-sidebar-search-background-color: @gray1;
+@compass-sidebar-button-create-database: @gray1;
+@compass-sidebar-hover-background-color: @gray1;
+@compass-sidebar-active-background-color: @gray4;
 @compass-sidebar-transition-time: 400ms;
 
 .compass-sidebar {
@@ -50,7 +53,7 @@
 
   &-filter {
     position: relative;
-    border-bottom: 1px solid @gray0;
+    box-shadow: 0px 2px 2px rgba(0,0,0,.3);
     z-index: 2;
   }
 
@@ -65,8 +68,8 @@
   &-search-input {
     padding: 7px 5px 5px 36px;
     height: auto;
-    background: @compass-sidebar-base-background-color;
-    @compass-sidebar-base-background-color: darken(hsl(201, 11%, 41%), 5%);
+    background: @compass-sidebar-search-background-color;
+    @compass-sidebar-search-background-color: lighten(hsl(204, 29%, 18%), 5%);
     color: @pw;
     width: 100%;
     border: none;
@@ -114,8 +117,8 @@
   }
 
   &-button-create-database {
-    background: @compass-sidebar-base-background-color;
-    @compass-sidebar-base-background-color: darken(hsl(201, 11%, 41%), 5%);
+    background: @compass-sidebar-button-create-database;
+    @compass-sidebar-button-create-database: lighten(hsl(204, 29%, 18%), 5%);
     border-radius: 14px;
     border: 0;
     color: @pw;
@@ -131,7 +134,7 @@
     transition: all 180ms ease;
     white-space: nowrap;
     text-align: center;
-    padding-left: 6px;
+    padding-left: 7px;
 
     .plus-button {
       opacity: 0;
@@ -142,9 +145,8 @@
 
   &-button-create-database:hover {
     width: 100%;
-    background: @compass-sidebar-base-background-color;
-    @compass-sidebar-base-background-color: lighten(hsl(201, 11%, 41%), 10%);
-
+    background: @compass-sidebar-hover-background-color;
+    @compass-sidebar-hover-background-color: lighten(hsl(204, 29%, 18%), 5%);
   }
 
   &-button-create-database:hover {
@@ -154,7 +156,7 @@
   }
 
   &-button-create-database.compass-sidebar-button-is-disabled {
-    background-color: fade(@compass-sidebar-base-background-color, 0.4);
+    background: fade(@compass-sidebar-button-create-database, 0.4);
     opacity: 0.4;
     color: fade(@pw, 40%);
     cursor: not-allowed;
