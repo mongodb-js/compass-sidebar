@@ -3,9 +3,11 @@
 @compass-sidebar-default-text-color: @gray5;
 @compass-sidebar-base-background-color: @gray2;
 @compass-sidebar-search-background-color: @gray1;
+@compass-sidebar-search-background-color: lighten(hsl(204, 29%, 18%), 5%);
 @compass-sidebar-button-create-database: @gray1;
+@compass-sidebar-button-create-database: lighten(hsl(204, 29%, 18%), 5%);
 @compass-sidebar-hover-background-color: @gray1;
-@compass-sidebar-active-background-color: @gray4;
+@compass-sidebar-hover-background-color: lighten(hsl(204, 29%, 18%), 5%);
 @compass-sidebar-transition-time: 400ms;
 
 .compass-sidebar {
@@ -69,7 +71,6 @@
     padding: 7px 5px 5px 36px;
     height: auto;
     background: @compass-sidebar-search-background-color;
-    @compass-sidebar-search-background-color: lighten(hsl(204, 29%, 18%), 5%);
     color: @pw;
     width: 100%;
     border: none;
@@ -118,7 +119,6 @@
 
   &-button-create-database {
     background: @compass-sidebar-button-create-database;
-    @compass-sidebar-button-create-database: lighten(hsl(204, 29%, 18%), 5%);
     border-radius: 14px;
     border: 0;
     color: @pw;
@@ -134,7 +134,6 @@
     transition: all 180ms ease;
     white-space: nowrap;
     text-align: center;
-    padding-left: 7px;
 
     .plus-button {
       opacity: 0;
@@ -146,7 +145,6 @@
   &-button-create-database:hover {
     width: 100%;
     background: @compass-sidebar-hover-background-color;
-    @compass-sidebar-hover-background-color: lighten(hsl(204, 29%, 18%), 5%);
   }
 
   &-button-create-database:hover {
