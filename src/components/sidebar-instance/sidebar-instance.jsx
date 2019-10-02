@@ -21,7 +21,9 @@ class SidebarInstance extends PureComponent {
     detailsPlugins: PropTypes.array.isRequired,
     connection: PropTypes.object,
     toggleIsModalVisible: PropTypes.func.isRequired,
-    isModalVisible: PropTypes.bool.isRequired
+    isModalVisible: PropTypes.bool.isRequired,
+    deleteFavorite: PropTypes.func.isRequired,
+    saveFavorite: PropTypes.func.isRequired
   };
 
   /**
@@ -30,7 +32,9 @@ class SidebarInstance extends PureComponent {
    * @param {Object} connection - The current connection.
    */
   deleteFavorite(connection) {
-    global.hadronApp.appRegistry.emit('delete-favorite', connection);
+    this.props.deleteFavorite(connection);
+    this.props.toggleIsModalVisible(false);
+    global.hadronApp.appRegistry.emit('clear-current-favorite');
   }
 
   /**
@@ -47,12 +51,7 @@ class SidebarInstance extends PureComponent {
    * @param {String} color - The favorite color.
    */
   saveFavorite(name, color) {
-    global.hadronApp.appRegistry.emit(
-      'save-favorite',
-      name,
-      color,
-      this.props.connection
-    );
+    this.props.saveFavorite(this.props.connection, name, color);
     this.props.toggleIsModalVisible(false);
   }
 

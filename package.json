@@ -147,6 +147,7 @@
     "webpack-sources": "1.0.1"
   },
   "dependencies": {
+    "lodash.merge": "^4.6.2",
     "mongodb-redux-common": "0.0.2"
   }
 }

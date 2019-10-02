@@ -20,8 +20,8 @@ import { toggleIsGenuineMongoDBVisible } from 'modules/is-genuine-mongodb-visibl
 import { filterDatabases, changeDatabases } from 'modules/databases';
 import { changeFilterRegex } from 'modules/filter-regex';
 import { openLink } from 'modules/link';
-import { changeConnection } from 'modules/connection';
 import { toggleIsModalVisible } from 'modules/is-modal-visible';
+import { saveFavorite, deleteFavorite } from 'modules/connection';
 
 import { TOOLTIP_IDS } from 'constants/sidebar-constants';
 
@@ -54,7 +54,9 @@ class Sidebar extends PureComponent {
     globalAppRegistryEmit: PropTypes.func.isRequired,
     connection: PropTypes.object,
     toggleIsModalVisible: PropTypes.func.isRequired,
-    isModalVisible: PropTypes.bool.isRequired
+    isModalVisible: PropTypes.bool.isRequired,
+    deleteFavorite: PropTypes.func.isRequired,
+    saveFavorite: PropTypes.func.isRequired
   };
 
   componentWillReceiveProps() {
@@ -238,7 +240,7 @@ class Sidebar extends PureComponent {
           <i className={collapsedButton}/>
         </button>
         <SidebarTitle
-          name={this.props.connection.name}
+          connection={this.props.connection}
           isSidebarCollapsed={this.props.isCollapsed}
           globalAppRegistryEmit={this.props.globalAppRegistryEmit} />
         <SidebarInstance
@@ -251,7 +253,9 @@ class Sidebar extends PureComponent {
           globalAppRegistryEmit={this.props.globalAppRegistryEmit}
           connection={this.props.connection}
           toggleIsModalVisible={this.props.toggleIsModalVisible}
-          isModalVisible={this.props.isModalVisible} />
+          isModalVisible={this.props.isModalVisible}
+          saveFavorite={this.props.saveFavorite}
+          deleteFavorite={this.props.deleteFavorite} />
         <div
           className={classnames(styles['compass-sidebar-filter'])}
           onClick={this.handleSearchFocus.bind(this)}>
@@ -321,8 +325,9 @@ const MappedSidebar = connect(
     changeFilterRegex,
     openLink,
     globalAppRegistryEmit,
-    changeConnection,
-    toggleIsModalVisible
+    toggleIsModalVisible,
+    deleteFavorite,
+    saveFavorite
   },
 )(Sidebar);
 

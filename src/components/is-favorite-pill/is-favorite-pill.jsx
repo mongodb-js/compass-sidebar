@@ -12,7 +12,7 @@ class IsFavoritePill extends PureComponent {
   static displayName = 'IsFavoritePill';
   static propTypes = {
     isSidebarCollapsed: PropTypes.bool.isRequired,
-    connection: PropTypes.object,
+    connection: PropTypes.object.isRequired,
     toggleIsModalVisible: PropTypes.func.isRequired
   }
 

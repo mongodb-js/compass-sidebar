@@ -68,6 +68,7 @@ const connection = new Connection({
   port: 27017,
   isFavorite: true,
   name: 'This is a reallllllllllllllly long connection name',
+  color: '#326fde',
   authStrategy: 'MONGODB',
   isSrvRecord: false,
   readPreference: 'primaryPreferred',
