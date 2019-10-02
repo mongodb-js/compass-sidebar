@@ -81,9 +81,6 @@ global.hadronApp.instance.genuineMongoDB = { isGenuine: false, dbType: 'cosmos' 
 const state = { instance: global.hadronApp.instance };
 
 DeploymentStateStore.setToInitial();
-
-// TODO: New dataService throws `Cannot read property 'trigger' of undefined`
-// when standalone plugin is running
 appRegistry.emit('data-service-initialized', dataService);
 dataService.connect((error, ds) => {
   if (!error) {
