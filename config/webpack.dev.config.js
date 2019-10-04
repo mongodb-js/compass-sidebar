@@ -33,11 +33,23 @@ const config = {
     rules: [
       {
         test: /\.(png|jpg|jpeg|gif|svg)$/,
-        use: [{ loader: 'url-loader', options: { limit: 500000 } }]
+        use: [{
+          loader: 'url-loader',
+          query: {
+            limit: 8192,
+            name: 'assets/images/[name]__[hash:base64:5].[ext]'
+          }
+        }]
       },
       {
         test: /\.(woff|woff2|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
-        use: [{ loader: 'url-loader', options: { limit: 500000 } }]
+        use: [{
+          loader: 'url-loader',
+          query: {
+            limit: 8192,
+            name: 'assets/fonts/[name]__[hash:base64:5].[ext]'
+          }
+        }]
       }
     ]
   },

@@ -6,7 +6,7 @@ module.exports = (config) => {
     singleRun: true,
     files: ['test/karma-setup.js'],
     reporters: ['mocha'],
-    preprocessors: { 'test/karma-setup.js': ['webpack', 'sourcemap'] },
+    preprocessors: { 'test/karma-setup.js': ['webpack', 'sourcemap', 'electron'] },
     browsers: ['Electron'],
     frameworks: ['mocha', 'chai', 'sinon', 'chai-sinon'],
     webpack: webpackConfig,

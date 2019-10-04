@@ -27,11 +27,35 @@ const config = {
     rules: [
       {
         test: /\.(png|jpg|jpeg|gif|svg)$/,
-        use: [{ loader: 'url-loader', options: { limit: 500000 } }]
+        use: [{
+          loader: 'url-loader',
+          // In prod we need to go to $COMPASS_HOME/node_modules/<plugin>/lib or
+          // $USER_HOME/.mongodb/compasss(-community)/plugins
+          //
+          // @note This currently does not work in published plugin.
+          query: {
+            name: 'assets/images/[name]__[hash:base64:5].[ext]',
+            publicPath: function(file) {
+              return path.join(__dirname, '..', 'lib', file);
+            }
+          }
+        }]
       },
       {
         test: /\.(woff|woff2|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
-        use: [{ loader: 'url-loader', options: { limit: 500000 } }]
+        use: [{
+          loader: 'url-loader',
+          // In prod we need to go to $COMPASS_HOME/node_modules/<plugin>/lib or
+          // $USER_HOME/.mongodb/compasss(-community)/plugins
+          //
+          // @note This currently does not work in published plugin.
+          query: {
+            name: 'assets/images/[name]__[hash:base64:5].[ext]',
+            publicPath: function(file) {
+              return path.join(__dirname, '..', 'lib', file);
+            }
+          }
+        }]
       }
     ]
   },
