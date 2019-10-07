@@ -20,6 +20,7 @@ describe('SidebarInstance [Component]', () => {
         toggleIsModalVisible={() => {}}
         deleteFavorite={() => {}}
         saveFavorite={() => {}}
+        isModalVisible={false}
       />);
     });
 
