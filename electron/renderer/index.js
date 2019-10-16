@@ -82,6 +82,8 @@ const state = { instance: global.hadronApp.instance };
 DeploymentStateStore.setToInitial();
 appRegistry.emit('data-service-initialized', dataService);
 dataService.connect((error, ds) => {
+  ds.client.model.sshTunnel = 'USER_PASSWORD';
+  ds.client.model.sshTunnelHostname = '123.45.67.89';
   appRegistry.emit('data-service-connected', error, ds);
   appRegistry.emit('instance-refreshed', state);
 });
