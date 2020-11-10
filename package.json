@@ -42,7 +42,7 @@
     "redux": "^3.7.2"
   },
   "devDependencies": {
-    "@hot-loader/react-dom": "^16.9.0",
+    "@hot-loader/react-dom": "^17.0.0",
     "@mongodb-js/compass-app-stores": "^4.0.2",
     "@mongodb-js/compass-connect": "^5.3.3",
     "@mongodb-js/compass-deployment-awareness": "^10.0.0",
