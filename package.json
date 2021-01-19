@@ -47,7 +47,6 @@
     "@mongodb-js/compass-app-stores": "^4.0.2",
     "@mongodb-js/compass-connect": "^5.3.3",
     "@mongodb-js/compass-deployment-awareness": "^10.0.0",
-    "@mongodb-js/compass-instance-header": "^0.2.2",
     "@mongodb-js/compass-server-version": "^4.0.0",
     "@mongodb-js/compass-ssh-tunnel-status": "^5.0.0",
     "autoprefixer": "^9.4.6",
