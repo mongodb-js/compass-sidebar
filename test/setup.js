@@ -23,10 +23,6 @@ require('jsdom-global')('', {
   runScripts: 'dangerously'
 });
 
-chai.should();
-chai.use(sinonChai);
-chai.use(chaiEnzyme());
-
 const WriteStateStore = require('../electron/renderer/stores/deployment-state-store');
 const NamespaceStore = require('../electron/renderer/stores/namespace-store');
 const CollectionStore = require('../electron/renderer/stores/collection-store');
@@ -53,3 +49,7 @@ class Worker {
 }
 
 global.Worker = Worker;
+
+chai.should();
+chai.use(sinonChai);
+chai.use(chaiEnzyme());
